@@ -12,6 +12,25 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 'admin';
+    const ROLE_EMPLOYER = 'employer';
+    const ROLE_CANDIDATE = 'candidate';
+
+    public function isEmployer()
+    {
+        return $this->role === self::ROLE_EMPLOYER;
+    }
+
+    public function isCandidate()
+    {
+        return $this->role === self::ROLE_CANDIDATE;
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
