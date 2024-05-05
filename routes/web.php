@@ -5,6 +5,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Middleware\EnsureIsAdmin;
+use App\Http\Middleware\EnsureIsCandidate;
+use App\Http\Middleware\EnsureIsEmployer;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -14,7 +17,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-    
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -25,9 +28,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//Routes for only verified users
 Route::middleware('verified')->group(function () {
-    Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+
 });
 
+//Routes for admins only
+Route::middleware([EnsureIsAdmin::class])->group(function () {
+
+});
+
+//Routes for employers only
+Route::middleware([EnsureIsEmployer::class])->group(function () {
+
+});
+
+//Routes for only candidates only
+Route::middleware([EnsureIsCandidate::class])->group(function () {
+    Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+});
 
 require __DIR__ . '/auth.php';
