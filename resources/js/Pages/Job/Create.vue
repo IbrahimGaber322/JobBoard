@@ -38,10 +38,15 @@
         <label>Location:</label>
         <input v-model="form.location" />
       </div>
-      <div>
-        <label>Work Type:</label>
-        <input v-model="form.work_type" />
-      </div>
+     <div>
+  <label>Work Type:</label>
+  <select v-model="form.work_type" required>
+    <option value="hybrid">Hybrid</option>
+    <option value="remote">Remote</option>
+    <option value="onsite">Onsite</option>
+  </select>
+</div>
+
       <div>
         <label>Status:</label>
         <input v-model="form.status" />
@@ -50,10 +55,7 @@
         <label>Employer ID:</label>
         <input v-model="form.emp_id" />
       </div>
-      <div>
-        <label>No. of Candidates:</label>
-        <input type="number" v-model="form.no_of_candidates" />
-      </div>
+   
       <div>
         <label>Deadline:</label>
         <input type="date" v-model="form.deadline" />
