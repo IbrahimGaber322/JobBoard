@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class jobportal extends Model
 {
     use HasFactory;
-
     const WORK_TYPE_REMOTE = 'remote';
     const WORK_TYPE_ONSITE = 'onsite';
     const WORK_TYPE_HYBRID = 'hybrid';
 
     protected $fillable = [
-        'desc',
         'title',
+        'desc',
         'experience_level',
         'responsibilities',
         'skills',
@@ -28,6 +27,7 @@ class Job extends Model
         'emp_id',
         'no_of_candidates',
         'deadline',
+     
     ];
 
     public function employer()

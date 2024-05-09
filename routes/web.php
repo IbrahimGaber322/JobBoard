@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,12 +41,19 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
+    // Route::get('/job', [JobController::class, 'index'])->name('job.index');
+    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
+    Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
+    // Route::get('/job/{job}/edit', [JobController::class, 'edit'])->name('job.edit');
+    // Route::put('/job/{job}', [JobController::class, 'update'])->name('job.update');
+    // Route::delete('/job/{job}', [JobController::class, 'destroy'])->name('job.destroy');
 
 });
 
 //Routes for only candidates only
 Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+    
 });
 
 require __DIR__ . '/auth.php';
