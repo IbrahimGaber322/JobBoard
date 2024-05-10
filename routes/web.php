@@ -8,6 +8,9 @@ use Inertia\Inertia;
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureIsCandidate;
 use App\Http\Middleware\EnsureIsEmployer;
+use App\Http\Controllers\ApplicationController;
+
+Route::get('/hello', [IndexController::class, 'show']);
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -46,6 +49,10 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
 //Routes for only candidates only
 Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+    Route::get('/applications/create', [ApplicationController::class, 'create']);
+    Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
 });
+
+
 
 require __DIR__ . '/auth.php';
