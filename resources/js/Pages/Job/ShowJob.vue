@@ -36,7 +36,7 @@ export default {
     apply() {
      if (confirm('Are you sure you want to apply for this job?')) {
         const data = {
-            userId: 1,
+            empId: this.job.emp_id,
             jobId: this.job.id
         };
 

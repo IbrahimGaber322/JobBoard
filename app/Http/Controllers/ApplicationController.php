@@ -16,11 +16,6 @@ class ApplicationController extends Controller
         return Inertia::render('Applications/submit');
     }
 
-    public function create()
-    {
-        return inertia('Applications/create');
-    }
-
     public function store(Request $request)
     {
         $userID = Auth::id();
@@ -32,9 +27,29 @@ class ApplicationController extends Controller
         Application::create([
             'user_id' => $userID,
             'job_id' => $request->jobId,
+            'emp_id' => $request->empId,
             'status' => 'pending',
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Application created successfully!');
+    }
+
+    public function show()
+    {
+        $employerId = Auth::id();
+        $applications = Application::where('emp_id', $employerId)
+            ->with('job', 'candidate')
+            ->get();
+
+        $userApplications = $applications->map(function ($application) {
+            return [
+                'candidate_name' => $application->candidate->name,
+                'job_title' => $application->job->title,
+                'candidate_email' => $application->candidate->email,
+                'date_of_application' => $application->created_at->toDateString(),
+                'status' => $application->status,
+            ];
+        });
+        return Inertia::render('Applications/show', ['userApplications' => $userApplications]);
     }
 }
