@@ -11,7 +11,6 @@
       <p class="text-gray-700 mb-2">Location: {{ job.location }}</p>
       <p class="text-gray-700 mb-2">Work Type: {{ job.work_type }}</p>
       <p class="text-gray-700 mb-2">Status: {{ job.status }}</p>
-      <p class="text-gray-700 mb-2">Employer ID: {{ job.emp_id }}</p>
       <p class="text-gray-700 mb-2">Company Name: {{ job.company_name }}</p>
       <p class="text-gray-700 mb-2">Deadline: {{ formatDeadline(job.deadline) }}</p>
       <div class="flex justify-between items-center">

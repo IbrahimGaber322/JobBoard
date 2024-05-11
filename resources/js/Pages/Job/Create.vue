@@ -58,11 +58,8 @@
         <TextInput id="location" type="text" class="mt-1 block w-full" v-model="form.location" />
       </div>
 
-      <div class="grid grid-cols-2 gap-4 mb-6">
-        <div>
-          <InputLabel for="emp_id" value="Employer ID" />
-          <TextInput id="emp_id" type="text" class="mt-1 block w-full" v-model="form.emp_id" />
-        </div>
+      <div class="mb-6">
+       
         <div>
           <InputLabel for="company_name" value="Company Name" />
           <TextInput id="company_name" type="text" class="mt-1 block w-full" v-model="form.company_name" />
