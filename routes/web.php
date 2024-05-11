@@ -18,6 +18,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs');
+Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
+
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -41,17 +45,17 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
+
     // Route::get('/job', [JobController::class, 'index'])->name('job.index');
-    Route::get('/job', [JobController::class, 'index'])->name('job.index'); // Route for displaying jobs
+    Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
+
+    // Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs'); 
+
     Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
-    Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
-
-    // Route::get('/job/{job}/edit', [JobController::class, 'edit'])->name('job.edit');
-    // Route::put('/job/{job}', [JobController::class, 'update'])->name('job.update');
-    // Route::delete('/job/{job}', [JobController::class, 'destroy'])->name('job.destroy');
-
     // Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
+
+  
     Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('job.edit');
     Route::post('/job/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.delete');

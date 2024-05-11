@@ -14,20 +14,23 @@
       <p class="text-gray-700 mb-2">Company Name: {{ job.company_name }}</p>
       <p class="text-gray-700 mb-2">Deadline: {{ formatDeadline(job.deadline) }}</p>
       <div class="flex justify-between items-center">
-        <h2><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
-        <button @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
+        <!-- Only show edit button if user role is employer -->
+        <h2 v-if="isEmployer"><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
+        <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import GuestLayout from '@/Layouts/GuestLayout.vue';
-
 export default {
   props: {
     job: {
       type: Object,
+      required: true
+    },
+    userRole: {
+      type: String,
       required: true
     }
   },
@@ -45,6 +48,11 @@ export default {
     },
     formatDeadline(deadline) {
       return new Date(deadline).toLocaleDateString();
+    }
+  },
+  computed: {
+    isEmployer() {
+      return this.userRole === 'employer';
     }
   }
 }

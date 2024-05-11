@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->role === self::ROLE_EMPLOYER;
     }
-
+   
     public function isCandidate()
     {
         return $this->role === self::ROLE_CANDIDATE;

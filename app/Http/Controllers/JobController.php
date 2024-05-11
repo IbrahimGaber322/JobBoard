@@ -15,6 +15,7 @@ class JobController extends Controller
         return Inertia::render('Job/Create');
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -59,18 +60,61 @@ class JobController extends Controller
         return redirect()->route('job.create')->with('success', 'Job created successfully.');
     }
 
-    public function index(Request $request)
+    public function employerJobs(Request $request)
     {
-        $userId = $request->user()->id; // Get the authenticated user's ID
+        $userId = $request->user()->id;
         $jobs = jobportal::where('emp_id', $userId)->get();
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
 
-    public function show($id)
+    public function Jobs(Request $request)
     {
-        $job = jobportal::findOrFail($id);
-        return Inertia::render('Job/ShowJob', ['job' => $job]);
+        $jobs = jobportal::all();
+        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
+
+    // public function show($id)
+    // {
+    //     $job = jobportal::findOrFail($id);
+
+    //     return Inertia::render('Job/ShowJob', ['job' => $job]);
+    // }
+
+    // public function show($id)
+    // {
+    //     $job = jobportal::findOrFail($id);
+        
+    //     // Check if the user is authenticated before accessing their role
+    //     if (auth()->check()) {
+    //         $userRole = auth()->user()->role;
+    //     } else {
+    //         // If the user is not authenticated, set the role to null or any default value
+    //         $userRole = null;
+    //     }
+    
+    //     return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole]);
+    // }
+    public function show($id)
+{
+    $job = jobportal::findOrFail($id);
+
+    // Check if the user is authenticated before accessing their role and ID
+    if (auth()->check()) {
+        $user = auth()->user();
+        $userRole = $user->role;
+        $userId = $user->id;
+
+        // Check if the user is an employer and if their ID matches the job's employer ID
+        $isEmployer = $userRole === 'employer' && $job->emp_id === $userId;
+    } else {
+        // If the user is not authenticated, set the role to null or any default value
+        $userRole = null;
+        $isEmployer = false;
+    }
+
+    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer]);
+}
+
 
     public function edit($id)
     {
@@ -83,7 +127,7 @@ class JobController extends Controller
         try {
             $job = jobportal::findOrFail($id);
             $job->delete();
-            return redirect()->route('job.index')->with('success', 'Job deleted successfully.');
+            return redirect()->route('job.employerJobs')->with('success', 'Job deleted successfully.');
         } catch (\Exception $e) {
             \Log::error('Error deleting job:', $e);
             return back()->withInput()->withErrors(['error' => 'An error occurred while deleting the job. Please try again.']);
