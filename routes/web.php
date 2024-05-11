@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployerProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,12 +41,15 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
-
+    Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile.show');
 });
 
 //Routes for only candidates only
 Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';
