@@ -64,8 +64,8 @@
           <TextInput id="emp_id" type="text" class="mt-1 block w-full" v-model="form.emp_id" />
         </div>
         <div>
-          <InputLabel for="no_of_candidates" value="Number of Candidates" />
-          <TextInput id="no_of_candidates" type="text" class="mt-1 block w-full" v-model="form.no_of_candidates" />
+          <InputLabel for="company_name" value="Company Name" />
+          <TextInput id="company_name" type="text" class="mt-1 block w-full" v-model="form.company_name" />
         </div>
       </div>
 
@@ -105,7 +105,9 @@
     status: '',
     emp_id: '',
     no_of_candidates: '',
-    deadline: ''
+    deadline: '',
+    company_name: ''
+
   });
 
   const submitForm = () => {

@@ -30,6 +30,7 @@ class JobController extends Controller
             'emp_id' => 'exists:users,id',
             // 'no_of_candidates' => 'integer',
             'deadline' => 'date',
+            'company_name' => 'required|string'
             
         ]);
 
@@ -46,8 +47,10 @@ class JobController extends Controller
             'work_type' => $request->work_type,
             // 'status' => $request->status,
             'emp_id' => $request->emp_id,
-            'no_of_candidates' => $request->no_of_candidates,
+            // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
+            'company_name' => $request->company_name,
+
         ]);
 
         return redirect()->route('job.create')->with('success', 'Job created successfully.');
@@ -101,6 +104,8 @@ public function update(Request $request, $id)
         // 'status' => 'string',
         'emp_id' => 'exists:users,id',
         'deadline' => 'date',
+        'company_name' => 'string',
+
     ]);
 
     try {

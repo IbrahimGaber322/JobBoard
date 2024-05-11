@@ -18,6 +18,11 @@
             <i class="fas fa-clock mr-1"></i>
             <span>{{ job.work_type }}</span>
           </div>
+          <div class="flex items-center text-gray-500 mb-1">
+<i class="fas fa-building mr-1"></i>
+            
+            <span>{{ job.company_name }}</span>
+          </div>
           <div class="flex items-center text-gray-500">
             <i class="fas fa-map-marker-alt mr-1"></i>
             <span>{{ job.location }}</span>

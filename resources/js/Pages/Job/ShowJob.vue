@@ -12,7 +12,7 @@
       <p class="text-gray-700 mb-2">Work Type: {{ job.work_type }}</p>
       <p class="text-gray-700 mb-2">Status: {{ job.status }}</p>
       <p class="text-gray-700 mb-2">Employer ID: {{ job.emp_id }}</p>
-      <p class="text-gray-700 mb-2">Number of Candidates: {{ job.no_of_candidates }}</p>
+      <p class="text-gray-700 mb-2">Company Name: {{ job.company_name }}</p>
       <p class="text-gray-700 mb-2">Deadline: {{ formatDeadline(job.deadline) }}</p>
       <div class="flex justify-between items-center">
         <h2><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>

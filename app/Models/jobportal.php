@@ -27,6 +27,8 @@ class jobportal extends Model
         'emp_id',
         // 'no_of_candidates',
         'deadline',
+        'company_name',
+
      
     ];
 

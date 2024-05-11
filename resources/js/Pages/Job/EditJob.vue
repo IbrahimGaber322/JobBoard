@@ -64,8 +64,8 @@
           <input id="emp_id" type="text" class="mt-1 block w-full rounded-md" v-model="form.emp_id" />
         </div>
         <div>
-          <label for="no_of_candidates" class="block text-sm font-medium text-gray-700">Number of Candidates</label>
-          <input id="no_of_candidates" type="text" class="mt-1 block w-full rounded-md" v-model="form.no_of_candidates" />
+          <label for="company_name" class="block text-sm font-medium text-gray-700">Company Name</label>
+          <input id="company_name" type="text" class="mt-1 block w-full rounded-md" v-model="form.company_name" />
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export default {
         location: '',
         work_type: '',
         emp_id: '',
-        no_of_candidates: '',
+        company_name: '',
         deadline: ''
       },
       formFields: {
@@ -120,7 +120,7 @@ export default {
         location: { label: 'Location', type: 'text', required: false },
         work_type: { label: 'Work Type', type: 'text', required: false },
         emp_id: { label: 'Employer ID', type: 'text', required: false },
-        no_of_candidates: { label: 'Number of Candidates', type: 'text', required: false },
+        company_name: { label: 'Company Name', type: 'text', required: false },
         deadline: { label: 'Deadline', type: 'date', required: false }
       }
     };
