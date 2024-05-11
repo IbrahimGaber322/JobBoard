@@ -43,6 +43,7 @@ class ApplicationController extends Controller
 
         $userApplications = $applications->map(function ($application) {
             return [
+                'id' => $application->id,
                 'candidate_name' => $application->candidate->name,
                 'job_title' => $application->job->title,
                 'candidate_email' => $application->candidate->email,
@@ -52,4 +53,19 @@ class ApplicationController extends Controller
         });
         return Inertia::render('Applications/show', ['userApplications' => $userApplications]);
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:applications,id',
+            'status' => 'required|in:Accepted,Rejected',
+        ]);
+    
+        $application = Application::findOrFail($request->id);
+        $application->status = $request->status;
+        $application->save();
+    
+    }
+    
+    
 }

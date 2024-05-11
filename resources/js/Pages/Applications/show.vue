@@ -8,8 +8,8 @@
         <p>candidate email: {{ application.candidate_email }}</p>
         <p>applied in : {{ application.date_of_application }}</p>
         <p>status: {{ application.status }}</p>
-        <button @click="" >Mark Accepted</button>
-        <button @click="" >Mark Rejected</button>
+        <button @click="markStatus('Accepted', application.id)" >Mark Accepted</button>
+        <button @click="markStatus('Rejected', application.id)" >Mark Rejected</button>
       </li>
     </ul>
   </div>
@@ -22,6 +22,12 @@ export default {
       type: Array,
       required: true
     }
+  },
+  methods: {
+    markStatus(status, applicationId) {
+      this.$inertia.post(route('applications.update'), { id: applicationId, status: status });
+    }
+
   }
 }
 </script>
