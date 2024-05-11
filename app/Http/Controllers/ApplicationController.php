@@ -58,7 +58,7 @@ class ApplicationController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:applications,id',
-            'status' => 'required|in:Accepted,Rejected',
+            'status' => 'required|in:Accepted,Rejected,Cancelled',
         ]);
     
         $application = Application::findOrFail($request->id);
@@ -67,5 +67,22 @@ class ApplicationController extends Controller
     
     }
     
-    
+    public function showAppliedJobs()
+{
+    $userId = Auth::id();
+        $userApplications = Application::where('user_id', $userId)
+        ->with('job')
+        ->get();
+
+    $appliedJobs = $userApplications->map(function ($application) {
+        return [
+            'job_id' => $application->job->id,
+            'job_title' => $application->job->title,
+            'job_description' => $application->job->desc,
+            'application_id' => $application->id
+        ];
+    });
+
+    return Inertia::render('Applications/applied', ['appliedJobs' => $appliedJobs]);
+}
 }
