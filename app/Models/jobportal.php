@@ -19,14 +19,16 @@ class jobportal extends Model
         'responsibilities',
         'skills',
         'salary_range',
-        'date',
+        // 'date',
         'category',
         'location',
         'work_type',
-        'status',
+        // 'status',
         'emp_id',
         // 'no_of_candidates',
         'deadline',
+        'company_name',
+
      
     ];
 
