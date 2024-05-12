@@ -18,6 +18,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
 Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs');
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
 
@@ -45,10 +46,11 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
+    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
+
 
     // Route::get('/job', [JobController::class, 'index'])->name('job.index');
     Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
-    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
 
     // Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs'); 
 
