@@ -14,10 +14,25 @@
       <p class="text-gray-700 mb-2">Company Name: {{ job.company_name }}</p>
       <p class="text-gray-700 mb-2">Deadline: {{ formatDeadline(job.deadline) }}</p>
       <div class="flex justify-between items-center">
-        <!-- Only show edit button if user role is employer -->
-        <h2 v-if="isEmployer"><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
-        <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
+        <!-- Edit button with conditional styling -->
+        <button 
+          v-if="isEmployer" 
+          @click="editJob" 
+          class="text-blue-600 hover:underline"
+        >
+          Edit Job
+        </button>
+        <!-- Delete button with conditional styling -->
+        <button 
+          v-if="isEmployer" 
+          @click="deleteJob" 
+          class="text-red-600 hover:underline"
+        >
+          Delete Job
+        </button>
       </div>
+      <!-- Submit button -->
+      <button @click="apply" >Submit</button>
     </div>
   </div>
 </template>
@@ -32,7 +47,15 @@ export default {
     userRole: {
       type: String,
       required: true
-    }
+    },
+    userId: {
+      type: String,
+      required: true
+    },
+    isOwner: {
+      type: Boolean,
+      required: true
+    },
   },
   methods: {
     deleteJob() {
@@ -46,14 +69,38 @@ export default {
           });
       }
     },
+    apply() {
+      if (confirm('Are you sure you want to apply for this job?')) {
+        const data = {
+          empId: this.job.emp_id,
+          jobId: this.job.id
+        };
+
+        const routeParams = { id: this.job.id };
+
+        this.$inertia.post(route('application.store', routeParams), data);
+      }
+    },
     formatDeadline(deadline) {
       return new Date(deadline).toLocaleDateString();
+    },
+    editJob() {
+      
+      window.location.href = `/job/${this.job.id}/edit`;
     }
   },
   computed: {
     isEmployer() {
-      return this.userRole === 'employer';
+      const data = {
+          empId: this.job.emp_id,
+          jobId: this.job.id
+        };
+      return this.userRole === 'employer' && this.isOwner === true; 
     }
   }
 }
 </script>
+
+<style>
+/* Add any additional styling here if needed */
+</style>
