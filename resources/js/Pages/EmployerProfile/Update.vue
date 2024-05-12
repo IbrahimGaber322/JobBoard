@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -15,20 +16,25 @@ defineProps({
 });
 
 const user = usePage().props.auth.user;
-
+const profileImage = ref(user.image || '');
 const form = useForm({
     name: user.name,
     email: user.email,
     telephone: user.telephone || '',
-    image: null,
+    image: user.image || '',
     location: user.location || '',
-    numberOfEmployees: user.number_of_employees || '',
+    no_of_employees: user.no_of_employees || '',
     bio: user.bio || '',
-    // Add other fields here as needed
 });
 
-function handleFileUpload(field, event) {
-    form[field] = event.target.files[0];
+
+async function handleFileUpload(field, event) {
+    const file = event.target.files[0];  
+    if (file) {
+        form[field] = file;
+        profileImage.value = URL.createObjectURL(file);
+        console.log(profileImage.value);
+    }
 }
 
 const submit = () => {
@@ -74,7 +80,9 @@ const submit = () => {
                 <input type="file" id="image" @change="handleFileUpload('image', $event)" />
                 <InputError class="mt-2" :message="form.errors.image" />
             </div>
-
+            <div v-if="profileImage" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
+                <img :src="profileImage" class="w-full h-full object-cover" />
+            </div>
             <div>
                 <InputLabel for="location" value="Location" />
                 <TextInput id="location" type="text" class="mt-1 block w-full" v-model="form.location" autocomplete="off" />
@@ -82,9 +90,9 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="numberOfEmployees" value="Number of Employees" />
-                <TextInput id="numberOfEmployees" type="text" class="mt-1 block w-full" v-model="form.numberOfEmployees" autocomplete="off" />
-                <InputError class="mt-2" :message="form.errors.numberOfEmployees" />
+                <InputLabel for="no_of_employees" value="Number of Employees" />
+                <TextInput id="no_of_employees" type="text" class="mt-1 block w-full" v-model="form.no_of_employees" autocomplete="off" />
+                <InputError class="mt-2" :message="form.errors.no_of_employees" />
             </div>
 
             <div>

@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -15,7 +16,7 @@ defineProps({
 });
 
 const user = usePage().props.auth.user;
-
+const profileImage = ref(user.image || '');
 const form = useForm({
     name: user.name,
     email: user.email,
@@ -30,9 +31,13 @@ const form = useForm({
     resume: user.resume || null
 });
 
-function handleFileUpload(field, event) {
-    form[field] = event.target.files[0];
-    console.log(event.target.files[0]);
+async function handleFileUpload(field, event) {
+    const file = event.target.files[0];  
+    if (file) {
+        form[field] = file;
+        profileImage.value = URL.createObjectURL(file);
+        console.log(profileImage.value);
+    }
 }
 
 const submit = () => {
@@ -129,8 +134,8 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.image" />
             </div>
 
-            <div v-if="form.image && typeof form.image === 'string'" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
-                <img :src="form.image" class="w-full h-full object-cover" />
+            <div v-if="profileImage" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
+                <img :src="profileImage" class="w-full h-full object-cover" />
             </div>
 
             <div>
