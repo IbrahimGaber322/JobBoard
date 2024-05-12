@@ -28,6 +28,8 @@ class jobportal extends Model
         // 'no_of_candidates',
         'deadline',
         'company_name',
+        // 'company_logo',
+
 
      
     ];
