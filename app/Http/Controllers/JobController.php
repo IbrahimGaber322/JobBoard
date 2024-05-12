@@ -112,7 +112,7 @@ class JobController extends Controller
         $isEmployer = false;
     }
 
-    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer]);
+    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer ]);
 }
 
 

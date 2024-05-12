@@ -18,7 +18,7 @@
         <h2 v-if="isEmployer"><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
         <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
       </div>
-      <button @click="apply" >Submit</button>
+      <button v-if="isCandidate" @click="apply" >apply</button>
     </div>
   </div>
 </template>
@@ -66,6 +66,9 @@ export default {
   computed: {
     isEmployer() {
       return this.userRole === 'employer';
+    },
+    isCandidate(){
+      return this.userRole === 'candidate';
     }
   }
 }

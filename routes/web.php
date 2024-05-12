@@ -61,7 +61,6 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
     Route::post('/applications', [ApplicationController::class, 'update'])->name('applications.update');
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
-
 });
 
 //Routes for only candidates only

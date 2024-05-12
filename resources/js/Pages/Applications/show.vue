@@ -1,19 +1,44 @@
 <template>
-  <div>
-    <h1>Applications</h1>
-    <ul>
-      <li v-for="application in userApplications" :key="application.id">
-        <p>candidate name: {{ application.candidate_name }}</p>
-        <p>job title: {{ application.job_title }}</p>
-        <p>candidate email: {{ application.candidate_email }}</p>
-        <p>applied in : {{ application.date_of_application }}</p>
-        <p>status: {{ application.status }}</p>
-        <button @click="markStatus('Accepted', application.id)" >Mark Accepted</button>
-        <button @click="markStatus('Rejected', application.id)" >Mark Rejected</button>
-      </li>
-    </ul>
-  </div>
+    <div class="container mx-auto py-6">
+        <h1 class="text-2xl font-bold mb-4">Applications</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div
+                v-for="application in userApplications"
+                :key="application.id"
+                class="bg-white rounded-lg shadow-md p-4"
+            >
+                <div class="mb-4">
+                    <h2 class="text-lg font-semibold mb-2">
+                        <a 
+                            class="text-black hover:text-blue-600"
+                        >
+                            {{ application.candidate_name }}
+                        </a>
+                    </h2>
+
+                    <div class="flex items-center text-gray-500 mb-1">
+                        <span>job title: {{ application.job_title }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-500 mb-1">
+                        <span>candidate email: {{ application.candidate_email }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-500 mb-1">
+                        <span>applied in : {{ application.date_of_application }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-500">
+                        <span>status: {{ application.status }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
+
+
+
+
+
+
 
 <script>
 export default {
