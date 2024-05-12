@@ -24,29 +24,13 @@ class EmployerProfileController extends Controller
         $this->cloudinary = new Cloudinary();
     }
 
-    // public function edit(Request $request): Response
-    // {
-    //     return Inertia::render('EmployerProfile/Edit', [
-    //         'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-    //         'status' => session('status'),
-    //     ]);
-    // }
-
-    // public function update(ProfileUpdateRequest $request): RedirectResponse
-    // {        
-    //     return Redirect::route('employer.profile.edit');
-    // }
-
-    // public function destroy(Request $request): RedirectResponse
-    // {        
-    //     return Redirect::to('/');
-    // }
-
     public function show(Request $request)
     {
         $user = $request->user();
 
         return Inertia::render('EmployerProfile/Show', [
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
+            'status' => session('status'),
             'user' => $user,
         ]);
     }
@@ -63,7 +47,6 @@ class EmployerProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // Handle image upload
         if ($request->hasFile('image')) {
             $uploadedImageResponse = (new UploadApi())->upload(
                 $request->file('image')->getRealPath(),
@@ -79,14 +62,33 @@ class EmployerProfileController extends Controller
             $request->user()->image = $uploadedImageResponse['secure_url'];
         }
 
-        // Handle email verification status update
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
-        // Fill the user model with the request data and save changes
         $request->user()->fill($request->validated())->save();
 
-        return Redirect::route('employer.profile.edit')->with('status', 'Profile updated successfully.');
+        return Redirect::route('employer.profile.show')->with('status', 'Your profile has been updated successfully.');
+    }
+
+    public function delete(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        Auth::logout();
+
+        
+        if ($user->image) {
+            (new UploadApi())->destroy($user->image);
+        }  
+        $user->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();      
+        return Redirect::to('/')->with('status', 'Your account has been deleted.');
     }
 }
+
