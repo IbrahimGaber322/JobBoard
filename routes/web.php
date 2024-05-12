@@ -51,7 +51,7 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
-
+    Route::get('/myJobs/create', [JobController::class, 'create'])->name('job.create');
     Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
@@ -69,8 +69,8 @@ Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
     // Route::get('/job', [JobController::class, 'index'])->name('job.index');
     // Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
-    // Route::post('/job/{id}', [ApplicationController::class, 'store'])->name('application.store');
-    Route::get('/applied-jobs', [ApplicationController::class, 'showAppliedJobs'])->name('application.store');
+    Route::post('/job/{id}', [ApplicationController::class, 'store'])->name('application.store');
+    Route::get('/applied-jobs', [ApplicationController::class, 'showAppliedJobs'])->name('application.showapplied');
     Route::post('/applications', [ApplicationController::class, 'update'])->name('applications.update');
 
 });

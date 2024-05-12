@@ -48,15 +48,17 @@ export default {
       }
     },
     apply() {
-     if (confirm('Are you sure you want to apply for this job?')) {
+      if (confirm('Are you sure you want to apply for this job?')) {
         const data = {
-            empId: this.job.emp_id,
-            jobId: this.job.id
+          empId: this.job.emp_id,
+          jobId: this.job.id
         };
 
         const routeParams = { id: this.job.id };
 
-        this.$inertia.post(route('application.store', routeParams), data)
+        this.$inertia.post(route('application.store', routeParams), data);
+      }
+    },
     formatDeadline(deadline) {
       return new Date(deadline).toLocaleDateString();
     }
@@ -65,8 +67,7 @@ export default {
     isEmployer() {
       return this.userRole === 'employer';
     }
-    }
-    
   }
 }
 </script>
+

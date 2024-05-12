@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Models\jobportal;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,15 +24,20 @@ class ApplicationController extends Controller
         $request->validate([
             'jobId' => 'required',
         ]);
-
+    
+        $job = jobportal::findOrFail($request->jobId);
+    
+        $job->increment('no_of_candidates');
+    
         Application::create([
             'user_id' => $userID,
             'job_id' => $request->jobId,
             'emp_id' => $request->empId,
             'status' => 'pending',
         ]);
-
+    
         return redirect()->route('dashboard')->with('success', 'Application created successfully!');
+    
     }
 
     public function show()

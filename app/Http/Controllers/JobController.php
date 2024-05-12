@@ -36,8 +36,6 @@ class JobController extends Controller
             'company_name' => 'required|string'
         ]);
         
-        echo "byeee";
-
         $userId = auth()->id(); // Get the authenticated user's ID
 
         $job = jobportal::create([
@@ -59,7 +57,7 @@ class JobController extends Controller
             'company_name' => $request->company_name,
         ]);
 
-        return redirect()->route('job.create')->with('success', 'Job created successfully.');
+        // return redirect()->route('job.create')->with('success', 'Job created successfully.');
     }
 
     public function employerJobs(Request $request)
