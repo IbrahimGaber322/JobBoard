@@ -42,6 +42,9 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile.show');
+    Route::get('/employer/profile/edit', [EmployerProfileController::class, 'edit'])->name('employer.profile.edit');
+    Route::post('/employer/profile/update', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
+
 });
 
 //Routes for only candidates only
