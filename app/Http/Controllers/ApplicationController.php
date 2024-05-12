@@ -17,6 +17,7 @@ class ApplicationController extends Controller
         return Inertia::render('Applications/submit');
     }
 
+
     public function store(Request $request)
     {
         $userID = Auth::id();
@@ -60,13 +61,34 @@ class ApplicationController extends Controller
         return Inertia::render('Applications/show', ['userApplications' => $userApplications]);
     }
 
+    public function showAcceptedJobs()
+{
+    $userId = Auth::id();
+    
+    $acceptedApplications = Application::where('user_id', $userId)
+        ->where('status', 'Accepted')
+        ->with('job')
+        ->get();
+
+    $acceptedJobs = $acceptedApplications->map(function ($application) {
+        return [
+            'job_id' => $application->job->id,
+            'job_title' => $application->job->title,
+            'job_description' => $application->job->desc,
+            'application_id' => $application->id
+        ];
+    });
+
+    return Inertia::render('Applications/news', ['acceptedJobs' => $acceptedJobs]);
+}
+
     public function update(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:applications,id',
             'status' => 'required|in:Accepted,Rejected,Cancelled',
         ]);
-    
+   
         $application = Application::findOrFail($request->id);
         $application->status = $request->status;
         $application->save();

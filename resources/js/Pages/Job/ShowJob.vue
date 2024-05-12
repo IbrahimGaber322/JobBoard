@@ -18,7 +18,8 @@
         <h2 v-if="isEmployer"><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
         <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
       </div>
-      <button v-if="isCandidate" @click="apply" >apply</button>
+      <button v-if="isCandidate && !hasApplied" @click="apply">Apply</button>
+      <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', job.application_id)">Cancel</button>
     </div>
   </div>
 </template>
@@ -33,6 +34,10 @@ export default {
     userRole: {
       type: String,
       required: true
+    },
+    hasApplied: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -61,6 +66,9 @@ export default {
     },
     formatDeadline(deadline) {
       return new Date(deadline).toLocaleDateString();
+    },
+    markStatus(status, applicationId) {
+      this.$inertia.post(route('app.update'), { id: applicationId, status: status });
     }
   },
   computed: {

@@ -6,6 +6,8 @@ use App\Models\jobportal;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Application;
+
 
 class JobController extends Controller
 {
@@ -97,6 +99,7 @@ class JobController extends Controller
     public function show($id)
 {
     $job = jobportal::findOrFail($id);
+    $hasApplied = $this->hasApplied($id);
 
     // Check if the user is authenticated before accessing their role and ID
     if (auth()->check()) {
@@ -112,7 +115,7 @@ class JobController extends Controller
         $isEmployer = false;
     }
 
-    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer ]);
+    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied]);
 }
 
 
@@ -161,5 +164,16 @@ class JobController extends Controller
             \Log::error('Error updating job:', $e);
             return back()->withInput()->withErrors(['error' => 'An error occurred while updating the job. Please try again.']);
         }
+    }
+
+    public function hasApplied($jobId)
+    {
+        $userId = Auth::id();
+        $application = Application::where('job_id', $jobId)
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->exists();
+    
+        return $application;
     }
 }
