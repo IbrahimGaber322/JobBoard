@@ -35,7 +35,7 @@ class JobController extends Controller
             // 'emp_id' => 'exists:users,id',
             // 'no_of_candidates' => 'integer',
             'deadline' => 'date',
-            'company_name' => 'required|string'
+            'company_name' => 'required|string',
         ]);
         
         $userId = auth()->id(); 
@@ -57,6 +57,7 @@ class JobController extends Controller
             // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
+            
         ]);
 
         // return redirect()->route('job.create')->with('success', 'Job created successfully.');
@@ -72,11 +73,33 @@ class JobController extends Controller
     }
 
     public function Jobs(Request $request)
-    {
-        $jobs = jobportal::with('employer')->get();
+{
+    $jobs = jobportal::with('employer')->get();
 
-        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
+    if (auth()->check()) {
+        $user = auth()->user();
+        $userRole = $user->role;
+        $userId = $user->id;
+
+        $isEmployer = $userRole === 'employer';
+        $isOwner = false;
+
+        foreach ($jobs as $job) {
+            if ($userRole === 'employer' && $job->employer->id === $userId) {
+                $isOwner = true;
+                break;
+            }
+        }
+    } else {
+        $userRole = null;
+        $isEmployer = false;
+        $userId = null; 
+        $isOwner = false;
     }
+
+    return Inertia::render('Job/Jobs', ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
+}
+
 
    
     public function show($id)

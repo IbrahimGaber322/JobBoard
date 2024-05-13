@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\Request;
-use Cloudinary\Cloudinary;
+use App\Services\CloudinaryService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class EmployerProfileController extends Controller
 {
-    protected $cloudinary;
+    protected $cloudinaryService;
 
-    public function __construct()
+    public function __construct(CloudinaryService $cloudinaryService)
     {
-        $this->cloudinary = new Cloudinary();
+        $this->cloudinaryService = $cloudinaryService;
     }
 
     public function show(Request $request)
@@ -48,17 +48,7 @@ class EmployerProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         if ($request->hasFile('image')) {
-            $uploadedImageResponse = (new UploadApi())->upload(
-                $request->file('image')->getRealPath(),
-                [
-                    'folder' => 'profile_images',
-                    'transformation' => [
-                        'width' => 500,
-                        'height' => 500,
-                        'crop' => 'limit'
-                    ]
-                ]
-            );
+            $uploadedImageResponse = $this->cloudinaryService->uploadImage($request->file('image'));
             $request->user()->image = $uploadedImageResponse['secure_url'];
         }
 

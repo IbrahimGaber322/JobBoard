@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use Cloudinary\Cloudinary;
+use App\Services\CloudinaryService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Log;
 class ProfileController extends Controller
 {
 
-    protected $cloudinary;
+    protected $cloudinaryService;
 
-    public function __construct()
+    public function __construct(CloudinaryService $cloudinaryService)
     {
-        $this->cloudinary = new Cloudinary();
+        $this->cloudinaryService = $cloudinaryService;
     }
 
     public function edit(Request $request): Response
@@ -37,31 +37,13 @@ class ProfileController extends Controller
         Log::channel('stderr')->info($request->all());
 
         if ($request->hasFile('image')) {
-            Log::channel('stderr')->info('image url');
-            $uploadedImageResponse = (new UploadApi())->upload(
-                $request->file('image')->getRealPath(),
-                [
-                    'folder' => 'profile_images',
-                    'transformation' => [
-                        'width' => 500,
-                        'height' => 500,
-                        'crop' => 'limit'
-                    ]
-                ]
-            );
-            Log::channel('stderr')->info('image url', ['image' => $uploadedImageResponse]);
+            $uploadedImageResponse = $this->cloudinaryService->uploadImage($request->file('image'));
             $request->user()->image = $uploadedImageResponse['secure_url'];
         }
 
         if ($request->hasFile('resume')) {
-            $uploadedFileResponse = (new UploadApi())->upload(
-                $request->file('resume')->getRealPath(),
-                [
-                    'folder' => 'user_resumes',
-                    'resource_type' => 'raw'
-                ]
-            );
-            $request->user()->resume = $uploadedFileResponse['secure_url'];
+            $uploadedResumeResponse = $this->cloudinaryService->uploadResume($request->file('resume'));
+            $request->user()->resume = $uploadedResumeResponse['secure_url'];
         }
 
         $request->user()->fill($request->except(['image', 'resume']));

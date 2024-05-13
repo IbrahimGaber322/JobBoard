@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div v-if="isEmployer || job.status === 'accepted'" class="flex justify-center items-center h-screen">
     <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center">
@@ -32,7 +32,7 @@
         <p class="text-gray-700 mb-2"><strong>Category:</strong> {{ job.category }}</p>
         <p class="text-gray-700 mb-2"><strong>Location:</strong> {{ job.location }}</p>
         <p class="text-gray-700 mb-2"><strong>Work Type:</strong> {{ job.work_type }}</p>
-        <p class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
+        <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
         <p class="text-gray-700 mb-2"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
       </div>
       <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied">
