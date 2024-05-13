@@ -206,7 +206,7 @@ export default {
 }
 
 .tall-input {
-  min-height: 100px; /* Adjust this height according to your design */
+  min-height: 100px; 
 }
 
 .submit-button {

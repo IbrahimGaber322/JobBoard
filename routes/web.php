@@ -21,6 +21,7 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
 Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs');
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
 
@@ -55,11 +56,11 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
     Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('job.edit');
-    Route::post('/job/{id}', [JobController::class, 'update'])->name('job.update');
+    Route::post('/jobUpdate/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.delete');
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
-    // Route::post('/applications', [ApplicationController::class, 'update'])->name('app.update');
+    Route::post('/my-applications', [ApplicationController::class, 'update'])->name('app-accept.update');
 
 });
 

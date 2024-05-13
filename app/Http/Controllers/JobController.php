@@ -38,7 +38,7 @@ class JobController extends Controller
             'company_name' => 'required|string'
         ]);
         
-        $userId = auth()->id(); // Get the authenticated user's ID
+        $userId = auth()->id(); 
 
         $job = jobportal::create([
             'title' => $request->title,
@@ -53,7 +53,7 @@ class JobController extends Controller
             'work_type' => $request->work_type,
             // 'status' => $request->status,
             // 'emp_id' => $request->emp_id,
-            'emp_id' => $userId, // Assign emp_id to the logged-in user's ID
+            'emp_id' => $userId, 
             // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
@@ -65,58 +65,58 @@ class JobController extends Controller
     public function employerJobs(Request $request)
     {
         $userId = $request->user()->id;
-        $jobs = jobportal::where('emp_id', $userId)->get();
+        $jobs = JobPortal::with('employer')
+        ->where('emp_id', $userId)
+        ->get();
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
 
     public function Jobs(Request $request)
     {
-        $jobs = jobportal::all();
+        $jobs = jobportal::with('employer')->get();
+
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
 
-    // public function show($id)
-    // {
-    //     $job = jobportal::findOrFail($id);
-
-    //     return Inertia::render('Job/ShowJob', ['job' => $job]);
-    // }
-
-    // public function show($id)
-    // {
-    //     $job = jobportal::findOrFail($id);
-        
-    //     // Check if the user is authenticated before accessing their role
-    //     if (auth()->check()) {
-    //         $userRole = auth()->user()->role;
-    //     } else {
-    //         // If the user is not authenticated, set the role to null or any default value
-    //         $userRole = null;
-    //     }
-    
-    //     return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole]);
-    // }
+   
     public function show($id)
-{
-    $job = jobportal::findOrFail($id);
-    $hasApplied = $this->hasApplied($id);
+    {
+        $job = jobportal::with('employer')->findOrFail($id); 
 
-    // Check if the user is authenticated before accessing their role and ID
-    if (auth()->check()) {
-        $user = auth()->user();
-        $userRole = $user->role;
-        $userId = $user->id;
+    
+        if (auth()->check()) {
+            $user = auth()->user();
+            $userRole = $user->role;
+            $userId = $user->id;
+    
+            $isEmployer = $userRole === 'employer' && $job->emp_id === $userId;
+            $isOwner = $userId === $job->emp_id;
+            $hasApplied = Application::where('job_id', $id)
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->exists();
+            $appId = null;
 
-        // Check if the user is an employer and if their ID matches the job's employer ID
-        $isEmployer = $userRole === 'employer' && $job->emp_id === $userId;
-    } else {
-        // If the user is not authenticated, set the role to null or any default value
-        $userRole = null;
-        $isEmployer = false;
+            if ($hasApplied) {
+            $appId = Application::where('job_id', $id)
+                ->where('user_id', $userId)
+                ->pluck('id')
+                ->first();
+            } else{
+                $appId = null;
+            }
+
+        } else {
+            $userRole = null;
+            $isEmployer = false;
+            $userId = null; 
+            $isOwner = null;
+            $hasApplied = false; 
+            $appId = null;
+        }
+
+    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
     }
-
-    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied]);
-}
 
 
     public function edit($id)
@@ -166,14 +166,4 @@ class JobController extends Controller
         }
     }
 
-    public function hasApplied($jobId)
-    {
-        $userId = Auth::id();
-        $application = Application::where('job_id', $jobId)
-            ->where('user_id', $userId)
-            ->where('status', 'pending')
-            ->exists();
-    
-        return $application;
-    }
 }

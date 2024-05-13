@@ -22,7 +22,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     </h2>
                 </div>
                 <p class="text-gray-700">{{ job.job_description }}</p>
-                <button @click="markStatus('Cancelled', job.application_id)" >cancel</button>
+                <p class="text-gray-700">application status: {{ job.application_status }}</p>
+<button @click="markStatus('Cancelled', job.application_id)" 
+        :disabled="job.application_status !== 'pending'"
+        :class="{'text-gray-400 cursor-not-allowed': job.application_status !== 'pending'}">cancel</button>
+
             </div>
         </div>
     </div>

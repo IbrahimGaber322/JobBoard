@@ -31,13 +31,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             <button @click="markStatus('Rejected', application.id)" :class="{
                                 'text-red-600 hover:underline': application.status === 'pending',
                                 'text-gray-400 cursor-not-allowed': application.status !== 'pending'
-                            }" :disabled="application.status !== 'Pending'">
+                            }" :disabled="application.status !== 'pending'">
                                 Mark Rejected
                             </button>
                             <button @click="markStatus('Accepted', application.id)" :class="{
                                 'text-blue-600 hover:underline': application.status === 'pending',
                                 'text-gray-400 cursor-not-allowed': application.status !== 'pending'
-                            }" :disabled="application.status !== 'Pending'">
+                            }" :disabled="application.status !== 'pending'">
                                 Mark Accepted
                             </button>
                         </div>
@@ -59,7 +59,9 @@ export default {
     },
     methods: {
         markStatus(status, applicationId) {
-            this.$inertia.post(route('app.update'), { id: applicationId, status: status });
+            console.log(applicationId)
+            console.log(status)
+            this.$inertia.post(route('app-accept.update'), { id: applicationId, status: status });
         }
 
     }

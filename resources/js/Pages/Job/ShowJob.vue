@@ -1,25 +1,44 @@
 <template>
   <div class="flex justify-center items-center h-screen">
     <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
-      <h1 class="text-2xl font-bold mb-4">{{ job.title }}</h1>
-      <p class="text-gray-700 mb-2">Description: {{ job.desc }}</p>
-      <p class="text-gray-700 mb-2">Experience Level: {{ job.experience_level }}</p>
-      <p class="text-gray-700 mb-2">Responsibilities: {{ job.responsibilities }}</p>
-      <p class="text-gray-700 mb-2">Skills: {{ job.skills }}</p>
-      <p class="text-gray-700 mb-2">Salary Range: {{ job.salary_range }}</p>
-      <p class="text-gray-700 mb-2">Category: {{ job.category }}</p>
-      <p class="text-gray-700 mb-2">Location: {{ job.location }}</p>
-      <p class="text-gray-700 mb-2">Work Type: {{ job.work_type }}</p>
-      <p class="text-gray-700 mb-2">Status: {{ job.status }}</p>
-      <p class="text-gray-700 mb-2">Company Name: {{ job.company_name }}</p>
-      <p class="text-gray-700 mb-2">Deadline: {{ formatDeadline(job.deadline) }}</p>
-      <div class="flex justify-between items-center">
-        <!-- Only show edit button if user role is employer -->
-        <h2 v-if="isEmployer"><a :href="`/job/${job.id}/edit`" class="text-blue-600 hover:underline">Edit Job</a></h2>
-        <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">Delete Job</button>
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <div v-if="job.employer && job.employer.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
+            <img :src="job.employer.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
+          </div>
+          <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
+            <span class="text-gray-500 text-lg font-semibold">Company Logo</span>
+          </div>
+          <h1 class="text-2xl font-bold">{{ job.company_name }}</h1>
+        </div>
+        <div class="flex items-center">
+          <button v-if="isEmployer" @click="editJob" class="text-blue-600 hover:underline mr-2">
+            Edit Job
+          </button>
+          <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">
+            Delete Job
+          </button>
+        </div>
       </div>
-      <button v-if="isCandidate && !hasApplied" @click="apply">Apply</button>
-      <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', job.application_id)">Cancel</button>
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Job Details</h2>
+        <p class="text-gray-700 mb-2"><strong>Title:</strong> {{ job.title }}</p>
+        <p class="text-gray-700 mb-2"><strong>Description:</strong> {{ job.desc }}</p>
+        <p class="text-gray-700 mb-2"><strong>Experience Level:</strong> {{ job.experience_level }}</p>
+        <p class="text-gray-700 mb-2"><strong>Responsibilities:</strong> {{ job.responsibilities }}</p>
+        <p class="text-gray-700 mb-2"><strong>Skills:</strong> {{ job.skills }}</p>
+        <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Number of Candidates:</strong> {{ job.no_of_candidates }}</p>
+        <p class="text-gray-700 mb-2"><strong>Salary Range:</strong> {{ job.salary_range }}</p>
+        <p class="text-gray-700 mb-2"><strong>Category:</strong> {{ job.category }}</p>
+        <p class="text-gray-700 mb-2"><strong>Location:</strong> {{ job.location }}</p>
+        <p class="text-gray-700 mb-2"><strong>Work Type:</strong> {{ job.work_type }}</p>
+        <p class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
+        <p class="text-gray-700 mb-2"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
+      </div>
+      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied">
+        Submit Application
+      </button>
+      <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', appId)">Cancel</button>
     </div>
   </div>
 </template>
@@ -38,7 +57,19 @@ export default {
     hasApplied: {
       type: Boolean,
       default: false
-    }
+    },
+    appId:{
+      type: Number,
+      default: null
+    },
+    userId: {
+      type: String,
+      required: true
+    },
+    isOwner: {
+      type: Boolean,
+      required: true
+    },
   },
   methods: {
     deleteJob() {
@@ -68,12 +99,16 @@ export default {
       return new Date(deadline).toLocaleDateString();
     },
     markStatus(status, applicationId) {
+      console.log('Marking status:', status, 'for application ID:', applicationId);
       this.$inertia.post(route('app.update'), { id: applicationId, status: status });
+    },
+    editJob() {
+      window.location.href = `/job/${this.job.id}/edit`;
     }
   },
   computed: {
     isEmployer() {
-      return this.userRole === 'employer';
+      return this.userRole === 'employer' && this.isOwner === true; 
     },
     isCandidate(){
       return this.userRole === 'candidate';
@@ -82,3 +117,5 @@ export default {
 }
 </script>
 
+<style>
+</style>

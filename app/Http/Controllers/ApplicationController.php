@@ -107,7 +107,8 @@ class ApplicationController extends Controller
             'job_id' => $application->job->id,
             'job_title' => $application->job->title,
             'job_description' => $application->job->desc,
-            'application_id' => $application->id
+            'application_id' => $application->id,
+            'application_status' => $application->status
         ];
     });
 
