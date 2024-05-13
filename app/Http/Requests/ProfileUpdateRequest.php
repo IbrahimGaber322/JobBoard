@@ -25,9 +25,9 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'telephone' => ['nullable', 'string', 'max:255'], // Assuming telephone is a string of max length 255
             'gender' => ['nullable', 'in:male,female'], // Validation for specific allowed values
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg'], // Image files only
+          /*   'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg'], // Image files only
+            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx'], // File types PDF, DOC, DOCX only */
             'bio' => ['nullable', 'string'], // Assuming bio is a text field with no max length
-            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx'], // File types PDF, DOC, DOCX only
             'title' => ['nullable', 'string', 'max:255'], // Assuming title is a short string
             'location' => ['nullable', 'string', 'max:255'], // Assuming location is a short string
             'skills' => ['nullable', 'string'], // Assuming skills is a text field with no max length

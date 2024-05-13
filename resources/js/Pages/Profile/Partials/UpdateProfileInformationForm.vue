@@ -26,8 +26,8 @@ const form = useForm({
     bio: user.bio || '',
     skills: user.skills || '',
     experience: user.experience || '',
-    image: null,
-    resume: null
+    image: user.image || null,
+    resume: user.resume || null
 });
 
 function handleFileUpload(field, event) {
@@ -38,7 +38,7 @@ function handleFileUpload(field, event) {
 const submit = () => {
     console.log(form.data());  // Log form data to see what's being submitted
     form.post(route('profile.update'), {
-        forceFormData:true,
+        forceFormData: true,
         onSuccess: () => console.log("Form submitted successfully"),
         onError: error => console.error("Error submitting form", error)
     });
@@ -129,11 +129,19 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.image" />
             </div>
 
+            <div v-if="form.image && typeof form.image === 'string'" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
+                <img :src="form.image" class="w-full h-full object-cover" />
+            </div>
+
             <div>
                 <InputLabel for="resume" value="Resume" />
                 <input type="file" id="resume" @change="handleFileUpload('resume', $event)" />
                 <InputError class="mt-2" :message="form.errors.resume" />
             </div>
+
+            <!-- <div v-if="form.resume && typeof form.resume === 'string'">
+                <iframe :src="form.resume" class="w-full h-64 mt-2"></iframe>
+            </div> -->
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">
