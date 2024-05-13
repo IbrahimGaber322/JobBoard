@@ -11,6 +11,7 @@ use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureIsCandidate;
 use App\Http\Middleware\EnsureIsEmployer;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\AdminController;
 
 
 

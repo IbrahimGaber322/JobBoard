@@ -11,9 +11,13 @@ class AdminController extends Controller
 {
     public function index()
     {
-        // Render the admin panel view
-        return Inertia::render('AdminPanel');
+        // Fetch pending job postings from the database
+        $pendingJobPostings = jobportal::where('status', 'pending')->get();
+        
+        // Render the admin panel view and pass pending job postings data to the Vue.js component
+        return Inertia::render('admin/AdminPanel', ['pendingJobPostings' => $pendingJobPostings]);
     }
+    
 
     public function manageJobPostings()
     {
@@ -56,5 +60,10 @@ class AdminController extends Controller
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Job posting rejected successfully!');
+    }
+    public function dashboard()
+    {
+        // Render the admin dashboard view
+        return Inertia::render('admin/AdminDashboard');
     }
 }

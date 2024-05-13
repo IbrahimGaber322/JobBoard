@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('emp_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->integer('no_of_candidates')->nullable();
             $table->date('deadline')->nullable();
+
             //
         });
     }
