@@ -2,7 +2,12 @@
     <div class="container mx-auto">
       <h1 class="text-3xl font-bold mb-4">Welcome to Admin Panel</h1>
       <p class="mb-8">This is where you can manage various aspects of your application as an administrator.</p>
-      
+  
+      <!-- Link to Pending Job Postings page -->
+      <button @click="redirectToJobPostings" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+  View Pending Job Postings
+</button>
+
       <!-- Tailwind CSS cards to display pending job postings -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id">
@@ -20,28 +25,11 @@
       </div>
     </div>
   </template>
-  
-  <script>
-  export default {
-    name: 'AdminPanel',
-    props: {
-      pendingJobPostings: {
-        type: Array,
-        default: () => []
-      }
-    },
+  <script>export default {
     methods: {
-      // Method to approve a job posting
-      approveJob(jobId) {
-        // Implement the logic to approve the job posting
-        console.log('Approve job:', jobId);
-      },
-      // Method to reject a job posting
-      rejectJob(jobId) {
-        // Implement the logic to reject the job posting
-        console.log('Reject job:', jobId);
+      redirectToJobPostings() {
+        window.location.href = '/admin/job-postings';
       }
     }
   }
   </script>
-  

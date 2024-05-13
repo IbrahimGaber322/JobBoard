@@ -25,7 +25,7 @@ class AdminController extends Controller
         $pendingJobPostings = JobPortal::where('status', 'pending')->get();
         
         // Render the view to manage job postings
-        return Inertia::render('Admin/ManageJobPostings', ['pendingJobPostings' => $pendingJobPostings]);
+        return Inertia::render('admin/job-postings', ['pendingJobPostings' => $pendingJobPostings]);
     }
 
     public function approveJobPosting(Request $request)
@@ -38,7 +38,7 @@ class AdminController extends Controller
         $jobPosting = JobPortal::findOrFail($request->job_id);
 
         // Update the status to approved
-        $jobPosting->status = 'approved';
+        $jobPosting->status = 'accepted';
         $jobPosting->save();
 
         // Redirect back with success message
