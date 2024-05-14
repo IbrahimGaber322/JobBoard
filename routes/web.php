@@ -60,6 +60,7 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.delete');
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
     Route::post('/my-applications', [ApplicationController::class, 'update'])->name('app-accept.update');
+    Route::get('/candidate/{id}', [ApplicationController::class, 'showCandidateDetails'])->name('candidate.details');
 
 });
 

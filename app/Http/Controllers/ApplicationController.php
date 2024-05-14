@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\jobportal;
+use App\Models\User;
+
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,6 +54,7 @@ class ApplicationController extends Controller
             return [
                 'id' => $application->id,
                 'candidate_name' => $application->candidate->name,
+                'candidate_id' => $application->candidate->id,
                 'job_title' => $application->job->title,
                 'candidate_email' => $application->candidate->email,
                 'date_of_application' => $application->created_at->toDateString(),
@@ -135,6 +138,13 @@ public function showRejectedJobs()
 
     return Inertia::render('Applications/badnews', ['rejectedJobs' => $rejectedJobs]);
 }
+
+public function showCandidateDetails($id)
+    {
+        $candidate = User::findOrFail($id);
+
+        return Inertia::render('Applications/candidate', ['candidate' => $candidate]);
+    }
 
 }
 

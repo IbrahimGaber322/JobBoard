@@ -10,7 +10,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     class="bg-white rounded-lg shadow-md p-4">
                     <div class="mb-4">
                         <h2 class="text-lg font-semibold mb-2">
-                            <a class="text-black hover:text-blue-600">
+                            <a :href="`/candidate/${application.candidate_id}`" class="text-black hover:text-blue-600">
                                 {{ application.candidate_name }}
                             </a>
                         </h2>
