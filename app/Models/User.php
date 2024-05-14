@@ -23,7 +23,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->role === self::ROLE_EMPLOYER;
     }
-   
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function isCandidate()
     {
         return $this->role === self::ROLE_CANDIDATE;

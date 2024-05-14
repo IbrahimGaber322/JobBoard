@@ -141,5 +141,24 @@ public function countJobPostingsByStatus()
             'employees' => $employees,
         ]);
     }
-    
+    public function getCandidateApplications()
+{
+    $candidates = User::where('role', User::ROLE_CANDIDATE)
+        ->withCount(['applications as total_applications',
+            'applications as accepted_applications' => function ($query) {
+                $query->where('status', 'accepted');
+            },
+            'applications as rejected_applications' => function ($query) {
+                $query->where('status', 'rejected');
+            },
+            'applications as pending_applications' => function ($query) {
+                $query->where('status', 'pending');
+            }])
+        ->get();
+
+    return Inertia::render('admin/candidate-applications', [
+        'candidates' => $candidates,
+    ]);
+}
+
 }

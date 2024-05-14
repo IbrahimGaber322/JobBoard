@@ -8,7 +8,7 @@
         <p class="text-md">{{ employersCount }}</p>
       </div>
       <!-- Candidates Card -->
-      <div class="bg-green-200 border border-green-400 p-4 rounded-lg">
+      <div @click="redirectToCandidateApplications" class="bg-green-200 border border-green-400 p-4 rounded-lg cursor-pointer">
         <h2 class="text-lg font-semibold mb-2">Candidates Numbers</h2>
         <p class="text-md">{{ candidatesCount }}</p>
       </div>
@@ -25,6 +25,9 @@ export default {
   methods: {
     redirectToEmployeeJobStatistics() {
       this.$inertia.visit('/admin/employee-job-statistics');
+    },
+    redirectToCandidateApplications() {
+      this.$inertia.visit('/admin/candidate-applications');
     }
   }
 };

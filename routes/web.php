@@ -58,6 +58,7 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     Route::get('/admin/job-postings-dashboard', [AdminController::class, 'countJobPostingsByStatus'])->name('admin.jobCounts');
     Route::get('/admin/employee-job-statistics', [AdminController::class, 'getEmployeeJobStatistics'])
     ->name('admin.employeeJobStatistics');
+    Route::get('/admin/candidate-applications', [AdminController::class, 'getCandidateApplications'])->name('admin.candidateApplications');
     Route::get('/admin/user-counts', [AdminController::class, 'getUserCounts'])->name('admin.userCounts');
 });
 
