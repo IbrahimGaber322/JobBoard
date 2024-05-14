@@ -5,13 +5,34 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const user = usePage()?.props?.auth?.user;
+const routes = [];
+/* Add Routes here */
+const loggedInRoutes = [{ name: "Dashboard", link: "dashboard" }]
+const loggedOutRoutes = [];
+const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }];
+const candidateRoutes = [{ name: "Applications", link: "application.show" }];
+const adminRoutes = [];
+/* -------------- */
+if (user) {
+    routes.push(...loggedInRoutes);
+    if (user?.role === "admin") {
+        routes.push(...adminRoutes);
+    } else if (user?.role === "employer") {
+        routes.push(...employerRoutes);
+    } else if (user?.role === "candidate") {
+        candidateRoutes.push(...candidateRoutes);
+    }
+} else {
+    routes.push(...loggedOutRoutes);
+}
 </script>
 
 <template>
-    <div>
+    <div class="z-50 ">
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
@@ -27,16 +48,13 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
-                                <NavLink :href="route('application.show')">
-                                    Applications
+                                <NavLink v-for="(r) in routes" :href="route(r.link)" :active="route().current(r.link)">
+                                    {{ r.name }}
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <div v-if="user" class="hidden sm:flex sm:items-center sm:ms-6">
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">
@@ -56,7 +74,7 @@ const showingNavigationDropdown = ref(false);
                                         </span>
                                     </template>
 
-                                    <template #content>
+                                    <template v-if="user" #content>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
@@ -66,6 +84,11 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
+                        <div v-if="!user" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <NavLink :href="route('login')">
+                                Login
+                            </NavLink>
+                        </div>
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button @click="showingNavigationDropdown = !showingNavigationDropdown"
@@ -91,25 +114,28 @@ const showingNavigationDropdown = ref(false);
                 <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
                     class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
+                        <NavLink v-for="(r) in routes" :href="route(r.link)" :active="route().current(r.link)">
+                            {{ r.name }}
+                        </NavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="px-4">
+                        <div v-if="user" class="px-4">
                             <div class="font-medium text-base text-gray-800">
-                                {{ $page.props.auth.user.name }}
+                                {{ user?.name }}
                             </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ user?.email }}</div>
                         </div>
 
-                        <div class="mt-3 space-y-1">
+                        <div v-if="user" class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
+                        </div>
+                        <div v-if="!user" class="mt-3 space-y-1">
+                            <ResponsiveNavLink :href="route('login')"> Login </ResponsiveNavLink>
                         </div>
                     </div>
                 </div>

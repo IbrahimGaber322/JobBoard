@@ -30,7 +30,7 @@ class JobController extends Controller
 
     public function store(Request $request, CloudinaryService $cloudinaryService)
     {
-            $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
             'experience_level' => 'string',
@@ -74,7 +74,7 @@ class JobController extends Controller
             'work_type' => $request->work_type,
             // 'status' => $request->status,
             // 'emp_id' => $request->emp_id,
-            'emp_id' => $userId, 
+            'emp_id' => $userId,
             // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
@@ -123,17 +123,17 @@ class JobController extends Controller
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
 
-   
+
     public function show($id)
     {
-        $job = jobportal::with('employer')->findOrFail($id); 
+        $job = jobportal::with('employer')->findOrFail($id);
 
-    
+
         if (auth()->check()) {
             $user = auth()->user();
             $userRole = $user->role;
             $userId = $user->id;
-    
+
             $isEmployer = $userRole === 'employer' && $job->emp_id === $userId;
             $isOwner = $userId === $job->emp_id;
             $hasApplied = Application::where('job_id', $id)
@@ -143,31 +143,33 @@ class JobController extends Controller
             $appId = null;
 
             if ($hasApplied) {
-            $appId = Application::where('job_id', $id)
-                ->where('user_id', $userId)
-                ->pluck('id')
-                ->first();
-            } else{
+                $appId = Application::where('job_id', $id)
+                    ->where('user_id', $userId)
+                    ->pluck('id')
+                    ->first();
+            } else {
                 $appId = null;
             }
 
         } else {
             $userRole = null;
             $isEmployer = false;
-            $userId = null; 
+            $userId = null;
             $isOwner = null;
-            $hasApplied = false; 
+            $hasApplied = false;
             $appId = null;
         }
 
-    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
+        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
     }
 
 
     public function edit($id)
     {
+        $user = auth()->user();
         $job = jobportal::findOrFail($id);
-        return Inertia::render('Job/EditJob', ['job' => $job]);
+        $isOwner = $job->emp_id === $user->id;
+        return Inertia::render('Job/EditJob', ['job' => $job, $isOwner]);
     }
 
     public function destroy($id)
