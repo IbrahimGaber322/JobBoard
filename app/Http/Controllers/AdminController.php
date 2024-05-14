@@ -64,27 +64,33 @@ class AdminController extends Controller
         return Redirect::route('admin.jobPostings');
     }
     public function dashboard()
-    {
-        // Count the total number of users except admins
-        $totalUsers = User::where('role', '!=', User::ROLE_ADMIN)->count();
+{
+    // Count the total number of users except admins
+    $totalUsers = User::where('role', '!=', User::ROLE_ADMIN)->count();
 
-        // Count the number of accepted job postings
-        $acceptedJobPostings = JobPortal::where('status', 'accepted')->count();
+    // Count the total number of job postings
+    $totalJobs = JobPortal::count();
 
-        // Count the number of pending job postings
-        $pendingJobPostings = JobPortal::where('status', 'pending')->count();
+    // Render the admin dashboard view and pass the data
+    return Inertia::render('admin/dashboard', [
+        'totalUsers' => $totalUsers,
+        'totalJobs' => $totalJobs,
+    ]);
+}
 
-        // Count the number of rejected job postings
-        $rejectedJobPostings = JobPortal::where('status', 'rejected')->count();
+public function countJobPostingsByStatus()
+{
+    // Count the number of job postings by status
+    $jobCounts = [
+        'accepted' => JobPortal::where('status', 'accepted')->count(),
+        'pending' => JobPortal::where('status', 'pending')->count(),
+        'rejected' => JobPortal::where('status', 'rejected')->count(),
+    ];
 
-        // Render the admin dashboard view and pass the data
-        return Inertia::render('admin/dashboard', [
-            'totalUsers' => $totalUsers,
-            'acceptedJobPostings' => $acceptedJobPostings,
-            'pendingJobPostings' => $pendingJobPostings,
-            'rejectedJobPostings' => $rejectedJobPostings,
-        ]);
-    }
+    // Return job counts as part of Inertia render
+    return Inertia::render('admin/job-postings-dashboard', ['jobCounts' => $jobCounts]);
+}
+
 
     public function countEmployers()
     {

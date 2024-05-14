@@ -9,28 +9,10 @@
           <p class="text-gray-700">{{ totalUsers }}</p>
         </div>
   
-        <!-- Employer Job Postings -->
-        <div class="bg-yellow-200 rounded-lg shadow-md p-6 cursor-pointer" v-for="employer in employerJobPostings" :key="employer.id" @click="redirectToEmployerJobPostings(employer.id)">
-          <h2 class="text-xl font-semibold mb-4">{{ employer.name }} Job Postings</h2>
-          <p class="text-gray-700">{{ employer.job_postings_count }}</p>
-        </div>
-  
-        <!-- Accepted Job Postings -->
-        <div @click="redirectToAcceptedJobPostings" class="bg-green-200 rounded-lg shadow-md p-6 cursor-pointer">
-          <h2 class="text-xl font-semibold mb-4">Accepted Job Postings</h2>
-          <p class="text-gray-700">{{ acceptedJobPostings }}</p>
-        </div>
-  
-        <!-- Pending Job Postings -->
-        <div @click="redirectToJobPostings" class="bg-blue-200 rounded-lg shadow-md p-6 cursor-pointer">
-          <h2 class="text-xl font-semibold mb-4">Pending Job Postings</h2>
-          <p class="text-gray-700">{{ pendingJobPostings }}</p>
-        </div>
-  
-        <!-- Rejected Job Postings -->
-        <div @click="redirectToRejectedJobPostings" class="bg-red-200 rounded-lg shadow-md p-6 cursor-pointer">
-          <h2 class="text-xl font-semibold mb-4">Rejected Job Postings</h2>
-          <p class="text-gray-700">{{ rejectedJobPostings }}</p>
+        <!-- Total Job Postings -->
+        <div @click="redirectToJobPostingsDash" class="bg-red-200 rounded-lg shadow-md p-6 cursor-pointer">
+          <h2 class="text-xl font-semibold mb-4">Total Job Postings</h2>
+          <p class="text-gray-700">{{ totalJobs }}</p>
         </div>
       </div>
     </div>
@@ -43,41 +25,19 @@
         type: Number,
         required: true
       },
-      acceptedJobPostings: {
+      totalJobs: {
         type: Number,
-        required: true
-      },
-      pendingJobPostings: {
-        type: Number,
-        required: true
-      },
-      rejectedJobPostings: {
-        type: Number,
-        required: true
-      },
-      employerJobPostings: {
-        type: Array,
         required: true
       }
     },
     methods: {
-      redirectToJobPostings() {
-        window.location.href = '/admin/job-postings';
-      },
-      redirectToAcceptedJobPostings() {
-        window.location.href = '/admin/accepted-job-postings';
-      },
-      redirectToRejectedJobPostings() {
-        window.location.href = '/admin/rejected-job-postings';
-      },
-      redirectToEmployerJobPostings(employerId) {
-        window.location.href = `/admin/employer/${employerId}/job-postings`;
+      redirectToJobPostingsDash() {
+        window.location.href = '/admin/job-postings-dashboard';
       },
       redirectTouserCounts() {
-        window.location.href = `/admin/user-counts`;
+        window.location.href = '/admin/user-counts';
       }
     }
   };
   </script>
-
   
