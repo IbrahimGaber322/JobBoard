@@ -59,7 +59,6 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::post('/jobUpdate/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.delete');
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
-    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/my-applications', [ApplicationController::class, 'update'])->name('app-accept.update');
 
 });
