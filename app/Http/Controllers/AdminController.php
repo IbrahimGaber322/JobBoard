@@ -99,4 +99,20 @@ class AdminController extends Controller
 
         return $candidatesCount;
     }
+
+    public function getUserCounts()
+{
+    // Count the number of employers
+    $employersCount = User::where('role', User::ROLE_EMPLOYER)->count();
+
+    // Count the number of candidates
+    $candidatesCount = User::where('role', User::ROLE_CANDIDATE)->count();
+
+    // Return counts as JSON
+    return response()->json([
+        'employersCount' => $employersCount,
+        'candidatesCount' => $candidatesCount,
+    ]);
+}
+
 }
