@@ -1,5 +1,6 @@
 <template>
   <GuestLayout>
+
     <Head title="Create Job" />
     <form @submit.prevent="submitForm" class="max-w-xl mx-auto">
       <!-- Job Details -->
@@ -7,29 +8,28 @@
         <label for="title" class="block text-sm font-medium text-gray-700">Job Title</label>
         <input id="title" type="text" class="mt-1 block w-full rounded-md" v-model="form.title" required autofocus />
       </div>
-      
+
       <div class="mb-6">
         <label for="desc" class="block text-sm font-medium text-gray-700">Description</label>
         <textarea id="desc" class="mt-1 block w-full rounded-md tall-input" v-model="form.desc" required></textarea>
-        <!-- You might add validation errors handling here if needed -->
       </div>
 
       <div class="mb-6">
         <label for="responsibilities" class="block text-sm font-medium text-gray-700">Responsibilities</label>
-        <textarea id="responsibilities" class="mt-1 block w-full rounded-md tall-input" v-model="form.responsibilities" required></textarea>
-        <!-- You might add validation errors handling here if needed -->
+        <textarea id="responsibilities" class="mt-1 block w-full rounded-md tall-input" v-model="form.responsibilities"
+          required></textarea>
       </div>
 
       <div class="mb-6">
         <label for="skills" class="block text-sm font-medium text-gray-700">Skills</label>
         <textarea id="skills" class="mt-1 block w-full rounded-md tall-input" v-model="form.skills" required></textarea>
-        <!-- You might add validation errors handling here if needed -->
       </div>
 
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div>
           <label for="experience_level" class="block text-sm font-medium text-gray-700">Experience Level</label>
-          <input id="experience_level" type="text" class="mt-1 block w-full rounded-md" v-model="form.experience_level" />
+          <input id="experience_level" type="text" class="mt-1 block w-full rounded-md"
+            v-model="form.experience_level" />
         </div>
         <div>
           <label for="salary_range" class="block text-sm font-medium text-gray-700">Salary Range</label>
@@ -49,7 +49,6 @@
             <option value="remote">Remote</option>
             <option value="onsite">Onsite</option>
           </select>
-          <!-- You might add validation errors handling here if needed -->
         </div>
       </div>
 
@@ -59,11 +58,8 @@
       </div>
 
       <div class="mb-6">
-       
-        <div>
-          <label for="company_name" class="block text-sm font-medium text-gray-700">Company Name</label>
-          <input id="company_name" type="text" class="mt-1 block w-full rounded-md" v-model="form.company_name" />
-        </div>
+        <label for="company_name" class="block text-sm font-medium text-gray-700">Company Name</label>
+        <input id="company_name" type="text" class="mt-1 block w-full rounded-md" v-model="form.company_name" />
       </div>
 
       <div class="mb-6">
@@ -73,7 +69,8 @@
 
       <!-- Submit Button -->
       <div class="flex items-center justify-end">
-        <button type="submit" :disabled="form.processing" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+        <button type="submit" :disabled="form.processing"
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
           Submit
         </button>
       </div>
@@ -97,28 +94,11 @@ export default {
         responsibilities: '',
         skills: '',
         salary_range: '',
-        date: '',
         category: '',
         location: '',
         work_type: '',
-        emp_id: '',
         company_name: '',
         deadline: ''
-      },
-      formFields: {
-        title: { label: 'Title', type: 'text', required: true },
-        desc: { label: 'Description', type: 'textarea', required: true },
-        experience_level: { label: 'Experience Level', type: 'text', required: false },
-        responsibilities: { label: 'Responsibilities', type: 'textarea', required: false },
-        skills: { label: 'Skills', type: 'textarea', required: false },
-        salary_range: { label: 'Salary Range', type: 'text', required: false },
-        date: { label: 'Date', type: 'date', required: false },
-        category: { label: 'Category', type: 'text', required: false },
-        location: { label: 'Location', type: 'text', required: false },
-        work_type: { label: 'Work Type', type: 'text', required: false },
-        emp_id: { label: 'Employer ID', type: 'text', required: false },
-        company_name: { label: 'Company Name', type: 'text', required: false },
-        deadline: { label: 'Deadline', type: 'date', required: false }
       }
     };
   },
@@ -126,17 +106,17 @@ export default {
     job: {
       type: Object,
       required: true
+    },
+    isOwner: {
+      type: Boolean,
+      required: true
     }
   },
-  computed: {
-    filteredFormFields() {
-      const excludedFields = ['date', 'no_of_candidates', 'emp_id', 'status'];
-      return Object.keys(this.formFields)
-        .filter(fieldName => !excludedFields.includes(fieldName))
-        .reduce((obj, key) => {
-          obj[key] = this.formFields[key];
-          return obj;
-        }, {});
+  watch: {
+    isOwner(newVal) {
+      if (!newVal) {
+        window.location.href = '/'; // Redirect or handle as needed
+      }
     }
   },
   mounted() {
@@ -164,8 +144,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style scoped>
 .job-form-container {
@@ -206,7 +184,7 @@ export default {
 }
 
 .tall-input {
-  min-height: 100px; 
+  min-height: 100px;
 }
 
 .submit-button {
