@@ -85,4 +85,18 @@ class AdminController extends Controller
             'rejectedJobPostings' => $rejectedJobPostings,
         ]);
     }
+
+    public function countEmployers()
+    {
+        $employersCount = User::where('role', User::ROLE_EMPLOYER)->count();
+
+        return $employersCount;
+    }
+
+    public function countCandidates()
+    {
+        $candidatesCount = User::where('role', User::ROLE_CANDIDATE)->count();
+
+        return $candidatesCount;
+    }
 }
