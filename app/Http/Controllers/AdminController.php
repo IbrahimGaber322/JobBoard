@@ -120,5 +120,26 @@ public function countJobPostingsByStatus()
             'candidatesCount' => $candidatesCount,
         ]);
     }
-
+    public function getEmployeeJobStatistics()
+    {
+        // Retrieve employees along with their job statistics
+        $employees = User::where('role', User::ROLE_EMPLOYER)
+            ->withCount(['postedJobs as total_jobs',
+                'postedJobs as accepted_jobs' => function ($query) {
+                    $query->where('status', 'accepted');
+                },
+                'postedJobs as rejected_jobs' => function ($query) {
+                    $query->where('status', 'rejected');
+                },
+                'postedJobs as pending_jobs' => function ($query) {
+                    $query->where('status', 'pending');
+                }])
+            ->get();
+    
+        // Render the employee job statistics using Inertia
+        return Inertia::render('admin/employee-job-statistics', [
+            'employees' => $employees,
+        ]);
+    }
+    
 }

@@ -5,13 +5,13 @@
       <div class="grid grid-cols-2 gap-4">
         <!-- Total Users -->
         <div @click="redirectTouserCounts" class="bg-indigo-200 rounded-lg shadow-md p-6 cursor-pointer">
-          <h2 class="text-xl font-semibold mb-4">Total Users</h2>
+          <h2 class="text-xl font-semibold mb-4">Users</h2>
           <p class="text-gray-700">{{ totalUsers }}</p>
         </div>
   
         <!-- Total Job Postings -->
         <div @click="redirectToJobPostingsDash" class="bg-red-200 rounded-lg shadow-md p-6 cursor-pointer">
-          <h2 class="text-xl font-semibold mb-4">Total Job Postings</h2>
+          <h2 class="text-xl font-semibold mb-4"> Job Posting Activity</h2>
           <p class="text-gray-700">{{ totalJobs }}</p>
         </div>
       </div>
