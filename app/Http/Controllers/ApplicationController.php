@@ -114,4 +114,27 @@ class ApplicationController extends Controller
 
     return Inertia::render('Applications/applied', ['appliedJobs' => $appliedJobs]);
 }
+
+public function showRejectedJobs()
+{
+    $userId = Auth::id();
+    
+    $rejectedApplications = Application::where('user_id', $userId)
+        ->where('status', 'Rejected')
+        ->with('job')
+        ->get();
+
+    $rejectedJobs = $rejectedApplications->map(function ($application) {
+        return [
+            'job_id' => $application->job->id,
+            'job_title' => $application->job->title,
+            'job_description' => $application->job->desc,
+            'application_id' => $application->id
+        ];
+    });
+
+    return Inertia::render('Applications/badnews', ['rejectedJobs' => $rejectedJobs]);
 }
+
+}
+

@@ -72,6 +72,7 @@ Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/applied-jobs', [ApplicationController::class, 'showAppliedJobs'])->name('application.showapplied');
     Route::post('/applications', [ApplicationController::class, 'update'])->name('app.update');
     Route::get('/news', [ApplicationController::class, 'showAcceptedJobs'])->name('app.news');
+    Route::get('/badnews', [ApplicationController::class, 'showRejectedJobs'])->name('app.badnews');
 
 });
 

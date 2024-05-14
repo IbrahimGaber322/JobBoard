@@ -93,7 +93,7 @@ class JobController extends Controller
             $isOwner = $userId === $job->emp_id;
             $hasApplied = Application::where('job_id', $id)
             ->where('user_id', $userId)
-            ->where('status', 'pending')
+            ->whereIn('status', ['pending', 'Accepted', 'Rejected'])
             ->exists();
             $appId = null;
 
