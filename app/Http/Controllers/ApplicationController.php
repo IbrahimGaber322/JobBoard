@@ -38,9 +38,7 @@ class ApplicationController extends Controller
             'emp_id' => $request->empId,
             'status' => 'pending',
         ]);
-    
-        return redirect()->route('dashboard')->with('success', 'Application created successfully!');
-    
+        
     }
 
     public function show()
