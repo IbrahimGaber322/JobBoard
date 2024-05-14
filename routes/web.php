@@ -51,8 +51,7 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     // Define routes for admin panel
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/job-postings', [AdminController::class, 'manageJobPostings'])->name('admin.jobPostings');
-    Route::post('/admin/job-postings/approve', [AdminController::class, 'approveJobPosting'])->name('admin.jobPostings.approve');
-    Route::post('/admin/job-postings/reject', [AdminController::class, 'rejectJobPosting'])->name('admin.jobPostings.reject');
+    Route::post('/admin/job-postings/update', [AdminController::class, 'update'])->name('admin.jobPostings.update');
 });
 
 //Routes for employers only

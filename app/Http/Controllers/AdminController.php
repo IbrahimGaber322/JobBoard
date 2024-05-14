@@ -28,38 +28,23 @@ class AdminController extends Controller
         return Inertia::render('admin/job-postings', ['pendingJobPostings' => $pendingJobPostings]);
     }
 
-    public function approveJobPosting(Request $request)
+    public function update(Request $request)
     {
+        // Validate the request data
         $request->validate([
-            'job_id' => 'required|exists:job_portals,id',
+            'id' => 'required|exists:jobportals,id',
+            'status' => 'required|in:accepted,rejected,cancelled', // Assuming these are the valid status values
         ]);
 
-        // Find the job posting by ID
-        $jobPosting = JobPortal::findOrFail($request->job_id);
+        // Find the job by its ID
+        $job = JobPortal::findOrFail($request->id);
 
-        // Update the status to approved
-        $jobPosting->status = 'accepted';
-        $jobPosting->save();
+        // Update the status
+        $job->status = $request->status;
+        $job->save();
 
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Job posting approved successfully!');
-    }
-
-    public function rejectJobPosting(Request $request)
-    {
-        $request->validate([
-            'job_id' => 'required|exists:job_portals,id',
-        ]);
-
-        // Find the job posting by ID
-        $jobPosting = JobPortal::findOrFail($request->job_id);
-
-        // Update the status to rejected
-        $jobPosting->status = 'rejected';
-        $jobPosting->save();
-
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Job posting rejected successfully!');
+        // Redirect back to the page where job postings are managed
+        return Redirect::route('admin.jobPostings');
     }
     public function dashboard()
     {
