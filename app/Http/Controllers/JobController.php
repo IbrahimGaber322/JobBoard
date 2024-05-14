@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Services\CloudinaryService;
-
 use App\Models\jobportal;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +22,6 @@ class JobController extends Controller
     public function create()
     {
         $userId = auth()->id();
-        
         return Inertia::render('Job/Create');
     }
 
@@ -115,7 +113,6 @@ class JobController extends Controller
 {
     $jobs = jobportal::with('employer')->get();
    //$jobs = jobportal::get();
-
     if (auth()->check()) {
         $user = auth()->user();
         $userRole = $user->role;
@@ -217,17 +214,10 @@ class JobController extends Controller
             'emp_id' => 'exists:users,id',
             'deadline' => 'date',
             'company_name' => 'string',
-            'image'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $job = jobportal::findOrFail($id);
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $uploadResult = $this->cloudinaryService->uploadImage($image);
-                $imageUrl = $uploadResult['secure_url'];
-                $job->image = $imageUrl; // Update the image attribute with the new URL
-            }
             $job->update($request->all());
             return redirect()->route('job.edit', $job->id)->with('success', 'Job updated successfully.');
         } catch (\Exception $e) {
@@ -236,4 +226,6 @@ class JobController extends Controller
         }
     }
 
+
 }
+

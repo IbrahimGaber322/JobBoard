@@ -71,6 +71,11 @@
         <input id="deadline" type="date" class="mt-1 block w-full rounded-md" v-model="form.deadline" />
       </div>
 
+      <input type="file" id="image" @change="handleFileUpload('image', $event)" />
+
+      <div v-if="jobImage" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%;">
+        <img :src="jobImage" class="w-full h-full object-cover" />
+      </div>
       <!-- Submit Button -->
       <div class="flex items-center justify-end">
         <button type="submit" :disabled="form.processing" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
@@ -83,6 +88,8 @@
 
 <script>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import { ref } from 'vue';
+const jobImage = ref('');
 
 export default {
   components: {
@@ -103,7 +110,8 @@ export default {
         work_type: '',
         emp_id: '',
         company_name: '',
-        deadline: ''
+        deadline: '',
+        image:''
       },
       formFields: {
         title: { label: 'Title', type: 'text', required: true },
@@ -143,6 +151,15 @@ export default {
     this.populateForm();
   },
   methods: {
+
+    handleFileUpload(field, event) {
+    const file = event.target.files[0];  
+    if (file) {
+      this.form[field] = file;
+      jobImage.value = URL.createObjectURL(file);
+      console.log(jobImage.value);
+    }
+},
     populateForm() {
       for (const field in this.form) {
         if (this.job.hasOwnProperty(field)) {
