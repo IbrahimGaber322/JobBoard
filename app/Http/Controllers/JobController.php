@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Notifications\NewJobAddedNotification;
 
+use App\Models\User;
 
 class JobController extends Controller
 {
@@ -36,8 +38,10 @@ class JobController extends Controller
             // 'no_of_candidates' => 'integer',
             'deadline' => 'date',
             'company_name' => 'required|string'
+            
         ]);
-        
+        $admin = User::where('role', 'admin')->first();
+        $admin->notify(new NewJobAddedNotification());
         $userId = auth()->id(); 
 
         $job = jobportal::create([

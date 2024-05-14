@@ -48,7 +48,7 @@ export default {
       window.location.href = '/admin/accepted-job-postings';
     },
     redirectToPendingJobPostings() {
-      window.location.href = '/admin/pending-job-postings';
+      window.location.href = '/admin/job-postings';
     },
     redirectToRejectedJobPostings() {
       window.location.href = '/admin/rejected-job-postings';
