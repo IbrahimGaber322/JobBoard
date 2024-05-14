@@ -55,7 +55,8 @@ export default {
     props: {
         userApplications: {
             type: Array,
-            required: true
+            required: true,
+            default: null
         }
     },
     methods: {

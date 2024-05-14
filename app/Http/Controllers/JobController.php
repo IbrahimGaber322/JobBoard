@@ -79,7 +79,9 @@ $admin->notify(new NewJobAddedNotification($employerName));
 
     public function Jobs(Request $request)
     {
-        $jobs = jobportal::with('employer')->get();
+        $jobs = jobportal::with('employer')
+        ->where('status', 'accepted')
+        ->get();
 
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
