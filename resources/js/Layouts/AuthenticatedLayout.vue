@@ -29,6 +29,8 @@ if (user) {
 } else {
     routes.push(...loggedOutRoutes);
 }
+
+console.log(user.role)
 </script>
 
 <template>
@@ -75,7 +77,8 @@ if (user) {
                                     </template>
 
                                     <template v-if="user" #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route(`${user.role}.profile.edit`)"> Profile
+                                        </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
@@ -129,7 +132,7 @@ if (user) {
                         </div>
 
                         <div v-if="user" class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route(`${user.role}.profile.edit`)"> Profile </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>

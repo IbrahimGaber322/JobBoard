@@ -14,7 +14,7 @@
       <p class="text-gray-700 mb-2">Number Of Employees: {{ user.no_of_employees }}</p>
       <div class="flex justify-between mt-4">
         <a :href="`/employer/jobs` " class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out">View My Jobs</a>
-        <a :href="`/employer/profile/edit`" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out">Update My Profile</a>
+        <a :href="`/profile/employer/edit`" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out">Update My Profile</a>
       </div>
     </div>
   </div>

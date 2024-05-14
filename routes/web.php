@@ -36,9 +36,7 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 //Routes for only verified users
@@ -58,19 +56,19 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/job-postings-dashboard', [AdminController::class, 'countJobPostingsByStatus'])->name('admin.jobCounts');
     Route::get('/admin/employee-job-statistics', [AdminController::class, 'getEmployeeJobStatistics'])
-    ->name('admin.employeeJobStatistics');
+        ->name('admin.employeeJobStatistics');
     Route::get('/admin/candidate-applications', [AdminController::class, 'getCandidateApplications'])->name('admin.candidateApplications');
     Route::get('/admin/user-counts', [AdminController::class, 'getUserCounts'])->name('admin.userCounts');
 });
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
-    Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile.show');
-    Route::get('/employer/profile/edit', [EmployerProfileController::class, 'edit'])->name('employer.profile.edit');
-    Route::post('/employer/profile/update', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
-    Route::delete('/employer/profile/delete', [EmployerProfileController::class, 'delete'])->name('employer.profile.delete');
+    Route::get('/profile/employer/show', [EmployerProfileController::class, 'show'])->name('employer.profile.edit');
+    Route::get('/profile/employer/edit', [EmployerProfileController::class, 'edit'])->name('employer.profile.edit-employer');
+    Route::post('/profile/employer', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
+    Route::delete('/profile/employer', [EmployerProfileController::class, 'delete'])->name('employer.profile.delete');
     Route::get('/myJobs/create', [JobController::class, 'create'])->name('job.create');
-    Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
+    Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs');
     //Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
     Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('job.edit');
@@ -79,15 +77,14 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
     Route::post('/my-applications', [ApplicationController::class, 'update'])->name('app-accept.update');
     Route::get('/candidate/{id}', [ApplicationController::class, 'showCandidateDetails'])->name('candidate.details');
-
 });
 
 //Routes for only candidates only
 Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/candidate/', [ProfileController::class, 'edit'])->name('candidate.profile.edit');
+    Route::post('/profile/candidate/', [ProfileController::class, 'update'])->name('candidate.profile.update');
+    Route::delete('/profile/candidate/', [ProfileController::class, 'destroy'])->name('candidate.profile.destroy');
     // Route::get('/job', [JobController::class, 'index'])->name('job.index');
     // Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
     Route::post('/job/{id}', [ApplicationController::class, 'store'])->name('application.store');
