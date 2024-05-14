@@ -1,16 +1,19 @@
 <template>
   <div>
-    <!-- Navbar -->
-    <nav class="bg-gray-800 p-4 flex justify-between items-center">
-      <!-- Logo -->
-      <div class="text-white font-bold text-xl">Admin Panel</div>
-      <!-- Notification Icon -->
-      <div class="text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-        </svg>
-      </div>
-    </nav>
+  <!-- Navbar -->
+<nav class="bg-gray-800 p-4 flex justify-between items-center">
+  <!-- Logo -->
+  <div class="text-white font-bold text-xl">Admin Panel</div>
+  <!-- Notification Icon -->
+  <div class="text-white">
+    <a href="/admin/notifications" class="block">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+      </svg>
+    </a>
+  </div>
+</nav>
+
 
     <!-- Main Content -->
     <div class="container mx-auto flex flex-col items-center justify-center h-screen">

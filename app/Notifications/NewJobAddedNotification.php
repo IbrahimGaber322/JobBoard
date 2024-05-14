@@ -2,16 +2,12 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\Models\User;
+use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class NewJobAddedNotification extends Notification
 {
-    use Queueable;
-
     protected $employerName;
 
     public function __construct($employerName)
@@ -21,7 +17,7 @@ class NewJobAddedNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database']; // Add 'database' channel to store notification in the database
     }
 
     public function toMail($notifiable)
@@ -32,10 +28,13 @@ class NewJobAddedNotification extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         return [
-            //
+            'employer_name' => $this->employerName,
+            'message' => 'A new job has been added by ' . $this->employerName,
+            'action_url' => '/admin/job-postings',
+            'action_text' => 'View Pending Job Postings',
         ];
     }
 }
