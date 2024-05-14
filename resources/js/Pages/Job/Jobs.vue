@@ -5,9 +5,9 @@
       <div v-for="job in jobs" :key="job.id">
         <div v-if="isEmployer || job.status === 'accepted'" class="bg-white rounded-lg shadow-md overflow-hidden p-6 flex flex-col justify-between items-center"> <!-- Adjusted flex properties -->
           <!-- Display user image if available -->
-          <div v-if="job.employer && job.employer.image" class="mb-6 flex justify-center">
+          <div v-if="job.employer && job.image" class="mb-6 flex justify-center">
             <div class="w-32 h-32 rounded-full overflow-hidden">
-              <img :src="job.employer.image" alt="User Image" class="w-full h-full object-cover rounded-full">
+              <img :src="job.image" alt="User Image" class="w-full h-full object-cover rounded-full">
             </div>
           </div>
           <!-- If user has no image -->

@@ -70,7 +70,11 @@
         <InputLabel for="deadline" value="Deadline" />
         <input id="deadline" type="date" class="mt-1 block w-full" v-model="form.deadline" />
       </div>
-
+      <div>
+                <InputLabel for="image" value="Profile Image" />
+                <input type="file" id="image" @change="handleFileUpload('image', $event)" />
+                <InputError class="mt-2" :message="form.errors.image" />
+            </div>
       <!-- Submit Button -->
       <div class="flex items-center justify-end">
         <PrimaryButton type="submit" :disabled="form.processing">
@@ -88,7 +92,8 @@
   import PrimaryButton from '@/Components/PrimaryButton.vue';
   import TextInput from '@/Components/TextInput.vue';
   import { Head, useForm } from '@inertiajs/vue3';
-
+  import { ref } from 'vue';
+  const jobImage = ref('');
   const form = useForm({
     title: '',
     desc: '',
@@ -103,9 +108,18 @@
     emp_id: '',
     no_of_candidates: '',
     deadline: '',
-    company_name: ''
-
+    company_name: '',
+    image: ''
   });
+
+  async function handleFileUpload(field, event) {
+    const file = event.target.files[0];  
+    if (file) {
+        form[field] = file;
+        jobImage.value = URL.createObjectURL(file);
+        console.log(jobImage.value);
+    }
+}
 
   const submitForm = () => {
     form.post(route('jobs.store'));

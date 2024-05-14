@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Services\CloudinaryService;
 
 use App\Models\jobportal;
 use Inertia\Inertia;
@@ -11,14 +12,23 @@ use App\Models\Application;
 
 class JobController extends Controller
 {
+
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
+
     public function create()
     {
         $userId = auth()->id();
+        
         return Inertia::render('Job/Create');
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryService $cloudinaryService)
     {
             $request->validate([
             'title' => 'required|string|max:255',
@@ -36,9 +46,17 @@ class JobController extends Controller
             // 'no_of_candidates' => 'integer',
             'deadline' => 'date',
             'company_name' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         
         $userId = auth()->id(); 
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $uploadResult = $cloudinaryService->uploadImage($image);
+            $imageUrl = $uploadResult['secure_url'];
+        } else {
+            $imageUrl = null;
+        }
 
         $job = jobportal::create([
             'title' => $request->title,
@@ -57,7 +75,7 @@ class JobController extends Controller
             // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
-            
+            'image' => $imageUrl
         ]);
 
         // return redirect()->route('job.create')->with('success', 'Job created successfully.');
@@ -96,6 +114,7 @@ class JobController extends Controller
     public function Jobs(Request $request)
 {
     $jobs = jobportal::with('employer')->get();
+   //$jobs = jobportal::get();
 
     if (auth()->check()) {
         $user = auth()->user();
@@ -198,10 +217,17 @@ class JobController extends Controller
             'emp_id' => 'exists:users,id',
             'deadline' => 'date',
             'company_name' => 'string',
+            'image'=> 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $job = jobportal::findOrFail($id);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $uploadResult = $this->cloudinaryService->uploadImage($image);
+                $imageUrl = $uploadResult['secure_url'];
+                $job->image = $imageUrl; // Update the image attribute with the new URL
+            }
             $job->update($request->all());
             return redirect()->route('job.edit', $job->id)->with('success', 'Job updated successfully.');
         } catch (\Exception $e) {
