@@ -1,19 +1,26 @@
 <template>
     <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-4">Pending Job Postings</h1>
+        <h1 class="text-3xl font-bold mb-8">Pending Job Postings</h1>
         
         <!-- Tailwind CSS cards to display pending job postings -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id">
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-xl font-semibold mb-4">{{ pendingJob.title }}</h2>
-                    <p class="text-gray-700 mb-4">{{ pendingJob.desc }}</p>
-                    <p class="text-gray-700 mb-4">Category: {{ pendingJob.category }}</p>
-                    <p class="text-gray-700 mb-4">Location: {{ pendingJob.location }}</p>
-                    <div class="flex justify-between">
-                        <button @click="approveJob(pendingJob.id)" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none">Approve</button>
-                        <button @click="rejectJob(pendingJob.id)" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none">Reject</button>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id" class="relative">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h2 class="text-lg font-semibold mb-2">{{ pendingJob.title }}</h2>
+                    <p class="text-gray-700 mb-2">{{ pendingJob.desc }}</p>
+                    <div class="text-gray-700 mb-2">
+                        <p class="font-semibold">Category:</p>
+                        <p class="italic">{{ pendingJob.category }}</p>
+                        <p class="font-semibold">Location:</p>
+                        <p class="italic">{{ pendingJob.location }}</p>
                     </div>
+                    <div class="flex justify-between items-center">
+                        <button @click="approveJob(pendingJob.id)" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded focus:outline-none">Approve</button>
+                        <button @click="rejectJob(pendingJob.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded focus:outline-none">Reject</button>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-2 py-1 rounded-full">
+                    <span class="text-xs font-semibold">New</span>
                 </div>
             </div>
         </div>
