@@ -40,8 +40,10 @@ class JobController extends Controller
             'company_name' => 'required|string'
             
         ]);
-        $admin = User::where('role', 'admin')->first();
-        $admin->notify(new NewJobAddedNotification());
+  // Inside the store method
+$employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
+$admin = User::where('role', 'admin')->first();
+$admin->notify(new NewJobAddedNotification($employerName));
         $userId = auth()->id(); 
 
         $job = jobportal::create([
