@@ -8,6 +8,12 @@
   View Pending Job Postings
 </button>
 
+<button @click="redirectToAcceptedJobPostings" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+  View Accepted Job Postings
+</button>
+<button @click="redirectToRejectedJobPostings" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+  View Rejected Job Postings
+</button>
       <!-- Tailwind CSS cards to display pending job postings -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id">
@@ -29,7 +35,16 @@
     methods: {
       redirectToJobPostings() {
         window.location.href = '/admin/job-postings';
-      }
+      },
+      redirectToAcceptedJobPostings(){
+        window.location.href = '/admin/accepted-job-postings';
+
+      },
+      redirectToRejectedJobPostings(){
+        window.location.href = '/admin/rejected-job-postings';
+
+      },
+      
     }
   }
   </script>

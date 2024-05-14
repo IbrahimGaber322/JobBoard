@@ -13,7 +13,9 @@ class AdminController extends Controller
     {
         // Fetch pending job postings from the database
         $pendingJobPostings = jobportal::where('status', 'pending')->get();
-        
+        $AcceptedJobPostings = jobportal::where('status', 'accepted')->get();
+        $RejectedJobPostings = jobportal::where('status', 'rejected')->get();
+
         // Render the admin panel view and pass pending job postings data to the Vue.js component
         return Inertia::render('admin/AdminPanel', ['pendingJobPostings' => $pendingJobPostings]);
     }
@@ -27,7 +29,22 @@ class AdminController extends Controller
         // Render the view to manage job postings
         return Inertia::render('admin/job-postings', ['pendingJobPostings' => $pendingJobPostings]);
     }
-
+    public function manageAcceptedJobPostings()
+    {
+        // Fetch pending job postings
+        $AcceptedJobPostings = jobportal::where('status', 'accepted')->get();
+        
+        // Render the view to manage job postings
+        return Inertia::render('admin/accepted-job-postings', ['acceptedJobPostings' => $AcceptedJobPostings]);
+    }
+    public function manageRejectedJobPostings()
+    {
+        // Fetch pending job postings
+        $RejectedJobPostings = jobportal::where('status', 'rejected')->get();
+        
+        // Render the view to manage job postings
+        return Inertia::render('admin/rejected-job-postings', ['rejectedJobPostings' => $RejectedJobPostings]);
+    }
     public function update(Request $request)
     {
         // Validate the request data
