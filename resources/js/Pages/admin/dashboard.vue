@@ -9,23 +9,23 @@
           <p class="text-gray-700">{{ totalUsers }}</p>
         </div>
   
-        <!-- Accepted Job Postings -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold mb-4">Accepted Job Postings</h2>
-          <p class="text-gray-700">{{ acceptedJobPostings }}</p>
-        </div>
-  
-        <!-- Pending Job Postings -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold mb-4">Pending Job Postings</h2>
-          <p class="text-gray-700">{{ pendingJobPostings }}</p>
-        </div>
-  
-        <!-- Rejected Job Postings -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold mb-4">Rejected Job Postings</h2>
-          <p class="text-gray-700">{{ rejectedJobPostings }}</p>
-        </div>
+     <!-- Accepted Job Postings -->
+     <div @click="redirectToAcceptedJobPostings" class="bg-white rounded-lg shadow-md p-6 cursor-pointer">
+        <h2 class="text-xl font-semibold mb-4">Accepted Job Postings</h2>
+        <p class="text-gray-700">{{ acceptedJobPostings }}</p>
+      </div>
+
+      <!-- Pending Job Postings -->
+      <div @click="redirectToJobPostings" class="bg-white rounded-lg shadow-md p-6 cursor-pointer">
+        <h2 class="text-xl font-semibold mb-4">Pending Job Postings</h2>
+        <p class="text-gray-700">{{ pendingJobPostings }}</p>
+      </div>
+
+      <!-- Rejected Job Postings -->
+      <div @click="redirectToRejectedJobPostings" class="bg-white rounded-lg shadow-md p-6 cursor-pointer">
+        <h2 class="text-xl font-semibold mb-4">Rejected Job Postings</h2>
+        <p class="text-gray-700">{{ rejectedJobPostings }}</p>
+      </div>
       </div>
     </div>
   </template>
@@ -49,6 +49,17 @@
         type: Number,
         required: true
       }
+    },
+    methods:{
+    redirectToJobPostings() {
+      window.location.href = '/admin/job-postings';
+    },
+    redirectToAcceptedJobPostings() {
+      window.location.href = '/admin/accepted-job-postings';
+    },
+    redirectToRejectedJobPostings() {
+      window.location.href = '/admin/rejected-job-postings';
+    },
     }
   }
   </script>
