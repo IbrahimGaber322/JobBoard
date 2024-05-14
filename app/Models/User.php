@@ -15,12 +15,19 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_ADMIN = 'admin';
     const ROLE_EMPLOYER = 'employer';
     const ROLE_CANDIDATE = 'candidate';
-
+    public function postedJobs()
+    {
+        return $this->hasMany(JobPortal::class, 'emp_id');
+    }
     public function isEmployer()
     {
         return $this->role === self::ROLE_EMPLOYER;
     }
-   
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function isCandidate()
     {
         return $this->role === self::ROLE_CANDIDATE;
