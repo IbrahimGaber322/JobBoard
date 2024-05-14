@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployerProfileController;
 use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,7 @@ use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureIsCandidate;
 use App\Http\Middleware\EnsureIsEmployer;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\AdminController;
 
 
 
@@ -46,11 +48,26 @@ Route::middleware('verified')->group(function () {
 
 //Routes for admins only
 Route::middleware([EnsureIsAdmin::class])->group(function () {
-
+    // Define routes for admin panel
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/job-postings', [AdminController::class, 'manageJobPostings'])->name('admin.jobPostings');
+    Route::get('/admin/accepted-job-postings', [AdminController::class, 'manageAcceptedJobPostings'])->name('admin.acceptedJobPostings');
+    Route::get('/admin/rejected-job-postings', [AdminController::class, 'manageRejectedJobPostings'])->name('admin.rejectedJobPostings');
+    Route::post('/admin/job-postings/update', [AdminController::class, 'update'])->name('admin.jobPostings.update');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/job-postings-dashboard', [AdminController::class, 'countJobPostingsByStatus'])->name('admin.jobCounts');
+    Route::get('/admin/employee-job-statistics', [AdminController::class, 'getEmployeeJobStatistics'])
+    ->name('admin.employeeJobStatistics');
+    Route::get('/admin/candidate-applications', [AdminController::class, 'getCandidateApplications'])->name('admin.candidateApplications');
+    Route::get('/admin/user-counts', [AdminController::class, 'getUserCounts'])->name('admin.userCounts');
 });
 
 //Routes for employers only
 Route::middleware([EnsureIsEmployer::class])->group(function () {
+    Route::get('/employer/profile', [EmployerProfileController::class, 'show'])->name('employer.profile.show');
+    Route::get('/employer/profile/edit', [EmployerProfileController::class, 'edit'])->name('employer.profile.edit');
+    Route::post('/employer/profile/update', [EmployerProfileController::class, 'update'])->name('employer.profile.update');
+    Route::delete('/employer/profile/delete', [EmployerProfileController::class, 'delete'])->name('employer.profile.delete');
     Route::get('/myJobs/create', [JobController::class, 'create'])->name('job.create');
     Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
     Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
@@ -67,6 +84,9 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
 //Routes for only candidates only
 Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/demo', [DemoController::class, 'index'])->name('demo');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Route::get('/job', [JobController::class, 'index'])->name('job.index');
     // Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
     Route::post('/job/{id}', [ApplicationController::class, 'store'])->name('application.store');
