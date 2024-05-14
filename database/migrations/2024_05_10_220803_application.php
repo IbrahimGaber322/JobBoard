@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('job_id');
+            $table->unsignedBigInteger('emp_id');
             $table->string('status');
             $table->timestamps();
         });
@@ -26,6 +27,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('applications');
-
     }
 };

@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default(NULL)->change();
+        Schema::table('jobportals', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
 
+        Schema::table('jobportals', function (Blueprint $table) {
+            $table->string('status', 255)->default('pending');
         });
     }
 
@@ -22,8 +25,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('jobportals', function (Blueprint $table) {
             //
+            $table->dropColumn('status');
+
         });
     }
 };

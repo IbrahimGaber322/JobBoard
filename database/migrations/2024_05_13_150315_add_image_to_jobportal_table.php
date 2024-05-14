@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default(NULL)->change();
-
+        Schema::table('jobportals', function (Blueprint $table) {
+            $table->string('image')->nullable(); // Define the new column
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('jobportals', function (Blueprint $table) {
+            $table->dropColumn('image');
         });
     }
 };
