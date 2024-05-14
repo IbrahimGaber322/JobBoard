@@ -3,7 +3,7 @@
     <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center">
-          <div v-if="job.employer && job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
+          <div v-if="isEmployer && job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
             <img :src="job.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
           </div>
           <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
