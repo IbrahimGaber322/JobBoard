@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Notifications\NewJobAddedNotification;
 
+use App\Models\User;
 
 class JobController extends Controller
 {
@@ -46,7 +48,10 @@ class JobController extends Controller
             'company_name' => 'required|string',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+  // Inside the store method
+$employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
+$admin = User::where('role', 'admin')->first();
+$admin->notify(new NewJobAddedNotification($employerName));
         $userId = auth()->id(); 
         if ($request->hasFile('image')) {
             $image = $request->file('image');

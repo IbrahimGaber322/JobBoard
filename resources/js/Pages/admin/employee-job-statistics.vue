@@ -7,10 +7,12 @@
     </div>
 
     <div v-else>
-      <div v-for="employee in employees" :key="employee.id" class="flex mb-4">
-        <div class="bg-white shadow-md rounded-lg p-6">
-          <h2 class="text-xl font-semibold mb-2">{{ employee.name }}</h2>
-          <canvas :id="'chart-' + employee.id" width="400" height="400"></canvas>
+      <div class="flex flex-wrap"> <!-- Use flexbox with wrap to ensure charts wrap to next line if needed -->
+        <div v-for="employee in employees" :key="employee.id" class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-4 mb-8"> <!-- Adjusted width and margin-bottom -->
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-2">{{ employee.name }}</h2>
+            <canvas :id="'chart-' + employee.id" width="200" height="200"></canvas> <!-- Adjusted width and height -->
+          </div>
         </div>
       </div>
     </div>
@@ -66,4 +68,5 @@ export default {
   }
 };
 </script>
+
 

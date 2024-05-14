@@ -6,6 +6,7 @@ use App\Models\JobPortal;
 use Illuminate\Http\Request;
 use App\Models\Application;
 use Inertia\Inertia;
+use App\Notifications\NewJobAddedNotification;
 
 class AdminController extends Controller
 {
@@ -160,5 +161,11 @@ public function countJobPostingsByStatus()
         'candidates' => $candidates,
     ]);
 }
-
+public function handleNewJobNotification()
+{
+    $admin = User::where('role', 'admin')->first();
+    $admin->notify(new NewJobAddedNotification());
+    
+    // Optionally, you can store the notification in the database or perform any other action.
+}
 }
