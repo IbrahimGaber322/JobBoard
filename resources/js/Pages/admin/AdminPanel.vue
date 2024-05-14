@@ -16,6 +16,9 @@
       <button @click="redirectToRejectedJobPostings" class="mb-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none">
         View Rejected Job Postings
       </button>
+      <button @click="redirectToAdminDashboard" class="mb-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none">
+        DashBoard
+      </button>
     </div>
 
     <!-- Tailwind CSS cards to display pending job postings -->
@@ -52,6 +55,9 @@ export default {
     redirectToRejectedJobPostings() {
       window.location.href = '/admin/rejected-job-postings';
     },
+    redirectToAdminDashboard(){
+      window.location.href = '/admin/dashboard';
+    }
   }
 }
 </script>

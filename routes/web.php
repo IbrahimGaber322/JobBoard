@@ -54,6 +54,7 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     Route::get('/admin/accepted-job-postings', [AdminController::class, 'manageAcceptedJobPostings'])->name('admin.acceptedJobPostings');
     Route::get('/admin/rejected-job-postings', [AdminController::class, 'manageRejectedJobPostings'])->name('admin.rejectedJobPostings');
     Route::post('/admin/job-postings/update', [AdminController::class, 'update'])->name('admin.jobPostings.update');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
 
 //Routes for employers only

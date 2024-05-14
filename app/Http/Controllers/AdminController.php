@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\JobPortal;
+use Illuminate\Http\Request;
 use App\Models\Application;
 use Inertia\Inertia;
 
@@ -65,7 +65,24 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
-        // Render the admin dashboard view
-        return Inertia::render('admin/AdminDashboard');
+        // Count the total number of users except admins
+        $totalUsers = User::where('role', '!=', User::ROLE_ADMIN)->count();
+
+        // Count the number of accepted job postings
+        $acceptedJobPostings = JobPortal::where('status', 'accepted')->count();
+
+        // Count the number of pending job postings
+        $pendingJobPostings = JobPortal::where('status', 'pending')->count();
+
+        // Count the number of rejected job postings
+        $rejectedJobPostings = JobPortal::where('status', 'rejected')->count();
+
+        // Render the admin dashboard view and pass the data
+        return Inertia::render('admin/dashboard', [
+            'totalUsers' => $totalUsers,
+            'acceptedJobPostings' => $acceptedJobPostings,
+            'pendingJobPostings' => $pendingJobPostings,
+            'rejectedJobPostings' => $rejectedJobPostings,
+        ]);
     }
 }
