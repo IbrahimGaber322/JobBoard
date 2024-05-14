@@ -115,33 +115,13 @@ class JobController extends Controller
     }
 
     public function Jobs(Request $request)
-{
-    $jobs = jobportal::with('employer')->get();
-   //$jobs = jobportal::get();
-    if (auth()->check()) {
-        $user = auth()->user();
-        $userRole = $user->role;
-        $userId = $user->id;
+    {
+        $jobs = jobportal::with('employer')
+        ->where('status', 'accepted')
+        ->get();
 
-        $isEmployer = $userRole === 'employer';
-        $isOwner = false;
-
-        foreach ($jobs as $job) {
-            if ($userRole === 'employer' && $job->employer->id === $userId) {
-                $isOwner = true;
-                break;
-            }
-        }
-    } else {
-        $userRole = null;
-        $isEmployer = false;
-        $userId = null; 
-        $isOwner = false;
+        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }
-
-    return Inertia::render('Job/Jobs', ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
-}
-
 
    
     public function show($id)
