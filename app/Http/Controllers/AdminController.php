@@ -168,4 +168,12 @@ public function handleNewJobNotification()
     
     // Optionally, you can store the notification in the database or perform any other action.
 }
+public function notifications()
+{
+    // Fetch notifications for the authenticated admin user
+    $notifications = auth()->user()->notifications;
+
+    // Return the notifications
+    return $notifications;
+}
 }
