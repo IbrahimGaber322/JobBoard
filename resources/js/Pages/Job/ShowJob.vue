@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div v-if="isEmployer || job.status === 'accepted'" class="flex justify-center items-center h-screen">
     <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center">
-          <div v-if="job.employer && job.employer.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
-            <img :src="job.employer.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
+          <div v-if="isEmployer && job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
+            <img :src="job.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
           </div>
           <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
             <span class="text-gray-500 text-lg font-semibold">Company Logo</span>
@@ -32,12 +32,13 @@
         <p class="text-gray-700 mb-2"><strong>Category:</strong> {{ job.category }}</p>
         <p class="text-gray-700 mb-2"><strong>Location:</strong> {{ job.location }}</p>
         <p class="text-gray-700 mb-2"><strong>Work Type:</strong> {{ job.work_type }}</p>
-        <p class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
+        <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
         <p class="text-gray-700 mb-2"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
       </div>
-      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied">
+      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied && !deadlinePassed">
         Submit Application
       </button>
+      <p v-if="isCandidate && !hasApplied && deadlinePassed" class="text-red-500" >Deadline has passed</p>
       <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', appId)">Cancel</button>
     </div>
   </div>
@@ -70,6 +71,14 @@ export default {
       type: Boolean,
       required: true
     },
+  },
+  data() {
+    return {
+      deadlinePassed: false
+    };
+  },
+  mounted() {
+    this.checkDeadline();
   },
   methods: {
     deleteJob() {
@@ -104,6 +113,14 @@ export default {
     },
     editJob() {
       window.location.href = `/job/${this.job.id}/edit`;
+    },
+    checkDeadline() {
+      const deadlineDate = new Date(this.job.deadline);
+      const currentDate = new Date();
+
+      if (currentDate > deadlineDate) {
+        this.deadlinePassed = true;
+      }
     }
   },
   computed: {

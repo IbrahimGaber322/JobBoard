@@ -71,14 +71,14 @@ Route::middleware([EnsureIsEmployer::class])->group(function () {
     Route::delete('/employer/profile/delete', [EmployerProfileController::class, 'delete'])->name('employer.profile.delete');
     Route::get('/myJobs/create', [JobController::class, 'create'])->name('job.create');
     Route::get('/employer/jobs', [JobController::class, 'employerJobs'])->name('job.employerJobs'); 
-    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
+    //Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/job', [JobController::class, 'store'])->name('jobs.store');
     Route::get('/job/{id}/edit', [JobController::class, 'edit'])->name('job.edit');
     Route::post('/jobUpdate/{id}', [JobController::class, 'update'])->name('job.update');
     Route::delete('/job/{id}', [JobController::class, 'destroy'])->name('job.delete');
     Route::get('/applications', [ApplicationController::class, 'show'])->name('application.show');
-    Route::get('/job/create', [JobController::class, 'create'])->name('job.create');
     Route::post('/my-applications', [ApplicationController::class, 'update'])->name('app-accept.update');
+    Route::get('/candidate/{id}', [ApplicationController::class, 'showCandidateDetails'])->name('candidate.details');
 
 });
 
@@ -94,6 +94,7 @@ Route::middleware([EnsureIsCandidate::class])->group(function () {
     Route::get('/applied-jobs', [ApplicationController::class, 'showAppliedJobs'])->name('application.showapplied');
     Route::post('/applications', [ApplicationController::class, 'update'])->name('app.update');
     Route::get('/news', [ApplicationController::class, 'showAcceptedJobs'])->name('app.news');
+    Route::get('/badnews', [ApplicationController::class, 'showRejectedJobs'])->name('app.badnews');
 
 });
 

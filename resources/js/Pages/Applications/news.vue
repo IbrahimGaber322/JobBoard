@@ -12,6 +12,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 class="bg-white rounded-lg shadow-md p-4"
             >
                 <div class="mb-4">
+                    <div class="text-green-600 font-semibold mt-2">Congratulations! You have been accepted for this job.</div>
                     <h2 class="text-lg font-semibold mb-2">
                         <a
                             :href="`../job/${job.job_id}`"
@@ -21,7 +22,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </a>
                     </h2>
                 </div>
-                <p class="text-gray-700">{{ job.job_description }}</p>
+                <p class="text-gray-700">job description: {{ job.job_description }}</p>
             </div>
         </div>
     </div>

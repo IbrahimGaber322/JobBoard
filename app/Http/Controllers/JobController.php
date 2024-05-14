@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\CloudinaryService;
 use App\Models\jobportal;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +13,14 @@ use App\Models\User;
 
 class JobController extends Controller
 {
+
+    protected $cloudinaryService;
+
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
+
     public function create()
     {
         $userId = auth()->id();
@@ -20,9 +28,9 @@ class JobController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryService $cloudinaryService)
     {
-            $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
             'experience_level' => 'string',
@@ -37,14 +45,21 @@ class JobController extends Controller
             // 'emp_id' => 'exists:users,id',
             // 'no_of_candidates' => 'integer',
             'deadline' => 'date',
-            'company_name' => 'required|string'
-            
+            'company_name' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
   // Inside the store method
-$employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
-$admin = User::where('role', 'admin')->first();
-$admin->notify(new NewJobAddedNotification($employerName));
+        // $employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
+        // $admin = User::where('role', 'admin')->first();
+        // $admin->notify(new NewJobAddedNotification($employerName));
         $userId = auth()->id(); 
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $uploadResult = $cloudinaryService->uploadImage($image);
+            $imageUrl = $uploadResult['secure_url'];
+        } else {
+            $imageUrl = null;
+        }
 
         $job = jobportal::create([
             'title' => $request->title,
@@ -59,10 +74,11 @@ $admin->notify(new NewJobAddedNotification($employerName));
             'work_type' => $request->work_type,
             // 'status' => $request->status,
             // 'emp_id' => $request->emp_id,
-            'emp_id' => $userId, 
+            'emp_id' => $userId,
             // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
+            'image' => $imageUrl
         ]);
 
         // return redirect()->route('job.create')->with('success', 'Job created successfully.');
@@ -74,61 +90,86 @@ $admin->notify(new NewJobAddedNotification($employerName));
         $jobs = JobPortal::with('employer')
         ->where('emp_id', $userId)
         ->get();
-        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
-    }
 
-    public function Jobs(Request $request)
-    {
-        $jobs = jobportal::with('employer')->get();
-
-        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
-    }
-
-   
-    public function show($id)
-    {
-        $job = jobportal::with('employer')->findOrFail($id); 
-
-    
         if (auth()->check()) {
             $user = auth()->user();
             $userRole = $user->role;
             $userId = $user->id;
     
+            $isEmployer = $userRole === 'employer';
+            $isOwner = false;
+    
+            foreach ($jobs as $job) {
+                if ($userRole === 'employer' && $job->employer->id === $userId) {
+                    $isOwner = true;
+                    break;
+                }
+            }
+        } else {
+            $userRole = null;
+            $isEmployer = false;
+            $userId = null; 
+            $isOwner = false;
+        }
+        return Inertia::render('Job/Jobs',  ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
+    }
+
+    public function Jobs(Request $request)
+    {
+        $jobs = jobportal::with('employer')
+        ->where('status', 'accepted')
+        ->get();
+
+        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
+    }
+
+
+    public function show($id)
+    {
+        $job = jobportal::with('employer')->findOrFail($id);
+
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            $userRole = $user->role;
+            $userId = $user->id;
+
             $isEmployer = $userRole === 'employer' && $job->emp_id === $userId;
             $isOwner = $userId === $job->emp_id;
             $hasApplied = Application::where('job_id', $id)
             ->where('user_id', $userId)
-            ->where('status', 'pending')
+            ->whereIn('status', ['pending', 'Accepted', 'Rejected'])
             ->exists();
             $appId = null;
 
             if ($hasApplied) {
-            $appId = Application::where('job_id', $id)
-                ->where('user_id', $userId)
-                ->pluck('id')
-                ->first();
-            } else{
+                $appId = Application::where('job_id', $id)
+                    ->where('user_id', $userId)
+                    ->pluck('id')
+                    ->first();
+            } else {
                 $appId = null;
             }
 
         } else {
             $userRole = null;
             $isEmployer = false;
-            $userId = null; 
+            $userId = null;
             $isOwner = null;
-            $hasApplied = false; 
+            $hasApplied = false;
             $appId = null;
         }
 
-    return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
+        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
     }
 
 
     public function edit($id)
     {
+        $user = auth()->user();
         $job = jobportal::findOrFail($id);
-        return Inertia::render('Job/EditJob', ['job' => $job]);
+        $isOwner = $job->emp_id === $user->id;
+        return Inertia::render('Job/EditJob', ['job' => $job, $isOwner]);
     }
 
     public function destroy($id)
@@ -172,4 +213,6 @@ $admin->notify(new NewJobAddedNotification($employerName));
         }
     }
 
+
 }
+
