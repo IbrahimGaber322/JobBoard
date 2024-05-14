@@ -13,7 +13,7 @@ const routes = [];
 /* Add Routes here */
 const loggedInRoutes = [{ name: "Dashboard", link: "dashboard" }]
 const loggedOutRoutes = [];
-const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }];
+const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }, { name: "Add Job", link: "job.create" }];
 const candidateRoutes = [{ name: "Applications", link: "application.show" }];
 const adminRoutes = [];
 /* -------------- */
