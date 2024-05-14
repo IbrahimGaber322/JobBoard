@@ -49,7 +49,7 @@ Route::middleware('verified')->group(function () {
 //Routes for admins only
 Route::middleware([EnsureIsAdmin::class])->group(function () {
     // Define routes for admin panel
-    Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications');
+    Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications')->middleware('auth');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/job-postings', [AdminController::class, 'manageJobPostings'])->name('admin.jobPostings');
     Route::get('/admin/accepted-job-postings', [AdminController::class, 'manageAcceptedJobPostings'])->name('admin.acceptedJobPostings');

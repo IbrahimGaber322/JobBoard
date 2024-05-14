@@ -171,9 +171,16 @@ public function handleNewJobNotification()
 public function notifications()
 {
     // Fetch notifications for the authenticated admin user
-    $notifications = auth()->user()->notifications;
+    $notifications = auth()->user()->notifications->map(function ($notification) {
+        return $notification->data['message'];
+    });
 
-    // Return the notifications
-    return $notifications;
+    // Return the notification messages
+    return Inertia::render('admin/notifications', [
+        'notifications' => $notifications,
+    ]);
 }
+
+
+
 }
