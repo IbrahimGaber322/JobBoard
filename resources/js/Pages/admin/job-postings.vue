@@ -55,6 +55,31 @@ export default {
             console.error('Error while updating job posting:', error);
         });
     },
+    rejectJob(jobId) {
+        // Send a POST request to reject the job posting
+        fetch(`/admin/job-postings/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                id: jobId,
+                status: 'rejected' // Set the status to 'rejected'
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // If the update was successful, refresh the data in the component
+                this.fetchPendingJobPostings(); // You need to define this method to fetch updated data
+            } else {
+                console.error('Failed to reject job posting');
+            }
+        })
+        .catch(error => {
+            console.error('Error while rejecting job posting:', error);
+        });
+    }
 }
 
 }
