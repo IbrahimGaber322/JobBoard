@@ -35,9 +35,10 @@
         <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
         <p class="text-gray-700 mb-2"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
       </div>
-      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied">
+      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied && !deadlinePassed">
         Submit Application
       </button>
+      <p v-if="isCandidate && !hasApplied && deadlinePassed" class="text-red-500" >Deadline has passed</p>
       <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', appId)">Cancel</button>
     </div>
   </div>
@@ -70,6 +71,14 @@ export default {
       type: Boolean,
       required: true
     },
+  },
+  data() {
+    return {
+      deadlinePassed: false
+    };
+  },
+  mounted() {
+    this.checkDeadline();
   },
   methods: {
     deleteJob() {
@@ -104,6 +113,14 @@ export default {
     },
     editJob() {
       window.location.href = `/job/${this.job.id}/edit`;
+    },
+    checkDeadline() {
+      const deadlineDate = new Date(this.job.deadline);
+      const currentDate = new Date();
+
+      if (currentDate > deadlineDate) {
+        this.deadlinePassed = true;
+      }
     }
   },
   computed: {

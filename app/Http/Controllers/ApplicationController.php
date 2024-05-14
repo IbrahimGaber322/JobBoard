@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\jobportal;
+use App\Models\User;
+
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,9 +38,7 @@ class ApplicationController extends Controller
             'emp_id' => $request->empId,
             'status' => 'pending',
         ]);
-    
-        return redirect()->route('dashboard')->with('success', 'Application created successfully!');
-    
+        
     }
 
     public function show()
@@ -52,6 +52,7 @@ class ApplicationController extends Controller
             return [
                 'id' => $application->id,
                 'candidate_name' => $application->candidate->name,
+                'candidate_id' => $application->candidate->id,
                 'job_title' => $application->job->title,
                 'candidate_email' => $application->candidate->email,
                 'date_of_application' => $application->created_at->toDateString(),
@@ -114,4 +115,34 @@ class ApplicationController extends Controller
 
     return Inertia::render('Applications/applied', ['appliedJobs' => $appliedJobs]);
 }
+
+public function showRejectedJobs()
+{
+    $userId = Auth::id();
+    
+    $rejectedApplications = Application::where('user_id', $userId)
+        ->where('status', 'Rejected')
+        ->with('job')
+        ->get();
+
+    $rejectedJobs = $rejectedApplications->map(function ($application) {
+        return [
+            'job_id' => $application->job->id,
+            'job_title' => $application->job->title,
+            'job_description' => $application->job->desc,
+            'application_id' => $application->id
+        ];
+    });
+
+    return Inertia::render('Applications/badnews', ['rejectedJobs' => $rejectedJobs]);
 }
+
+public function showCandidateDetails($id)
+    {
+        $candidate = User::findOrFail($id);
+
+        return Inertia::render('Applications/candidate', ['candidate' => $candidate]);
+    }
+
+}
+

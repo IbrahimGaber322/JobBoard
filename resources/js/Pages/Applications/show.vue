@@ -10,7 +10,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                     class="bg-white rounded-lg shadow-md p-4">
                     <div class="mb-4">
                         <h2 class="text-lg font-semibold mb-2">
-                            <a class="text-black hover:text-blue-600">
+                            <a :href="`/candidate/${application.candidate_id}`" class="text-black hover:text-blue-600">
                                 {{ application.candidate_name }}
                             </a>
                         </h2>
@@ -29,15 +29,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         </div>
                         <div class="flex justify-between items-center">
                             <button @click="markStatus('Rejected', application.id)" :class="{
-                                'text-red-600 hover:underline': application.status === 'pending',
-                                'text-gray-400 cursor-not-allowed': application.status !== 'pending'
-                            }" :disabled="application.status !== 'pending'">
+                                'text-red-600 hover:underline': application.status === 'pending' || application.status === 'Accepted',
+                                'text-gray-400 cursor-not-allowed': application.status === 'Rejected'
+                            }" :disabled="application.status === 'Rejected'">
                                 Mark Rejected
                             </button>
+
                             <button @click="markStatus('Accepted', application.id)" :class="{
-                                'text-blue-600 hover:underline': application.status === 'pending',
-                                'text-gray-400 cursor-not-allowed': application.status !== 'pending'
-                            }" :disabled="application.status !== 'pending'">
+                                'text-red-600 hover:underline': application.status === 'pending' || application.status === 'Rejected',
+                                'text-gray-400 cursor-not-allowed': application.status === 'Accepted'
+                            }" :disabled="application.status === 'Accepted'">
                                 Mark Accepted
                             </button>
                         </div>
@@ -49,7 +50,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 </template>
 
 
-    <script>
+<script>
 export default {
     props: {
         userApplications: {
