@@ -1,14 +1,11 @@
 <template>
-  <div>
+  <div class="container mx-auto p-4">
     <h2 class="text-xl font-bold mb-4">Notifications</h2>
-    <ul>
-      <li v-for="(notification, index) in notifications" :key="index" class="mb-2">
-        <div class="flex items-center justify-between border rounded-lg p-4 text-sm bg-blue-100">
-          <div class="flex items-center">
-            <div class="w-4 h-4 bg-blue-500 rounded-full mr-2"></div> <!-- Colored dot -->
-            <span class="font-semibold">Notification:</span>
-            <span class="ml-2">{{ notification }}</span>
-          </div>
+    <ul class="list-none">
+      <li v-for="(notification, index) in notifications" :key="index" class="flex items-center justify-between bg-gray-100 rounded-lg p-4 shadow-sm mb-2">
+        <div class="flex items-center mr-4">
+          <div :class="{ 'bg-green-500': notification.read, 'bg-red-500': !notification.read }" class="w-4 h-4 rounded-full"></div>
+          <span class="ml-2">{{ notification }}</span>
         </div>
       </li>
     </ul>
