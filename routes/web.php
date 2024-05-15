@@ -24,25 +24,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/jobs', [JobController::class, 'Jobs'])->name('job.Jobs');
+Route::get('/', [JobController::class, 'Jobs'])->name('home');
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
 
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
-
-Route::middleware('auth')->group(function () {
-
-});
-
-//Routes for only verified users
-Route::middleware('verified')->group(function () {
-
-});
 
 //Routes for admins only
 Route::middleware([EnsureIsAdmin::class])->group(function () {
@@ -59,6 +45,9 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
         ->name('admin.employeeJobStatistics');
     Route::get('/admin/candidate-applications', [AdminController::class, 'getCandidateApplications'])->name('admin.candidateApplications');
     Route::get('/admin/user-counts', [AdminController::class, 'getUserCounts'])->name('admin.userCounts');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 });
 
 //Routes for employers only

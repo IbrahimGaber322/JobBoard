@@ -89,7 +89,7 @@ class JobController extends Controller
         $userId = $request->user()->id;
         $jobs = JobPortal::with('employer')
         ->where('emp_id', $userId)
-        ->get();
+        ->paginate(9)->withQueryString();
 
         if (auth()->check()) {
             $user = auth()->user();
@@ -118,7 +118,7 @@ class JobController extends Controller
     {
         $jobs = jobportal::with('employer')
         ->where('status', 'accepted')
-        ->get();
+        ->paginate(9)->withQueryString();
 
         return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
     }

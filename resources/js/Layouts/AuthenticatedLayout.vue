@@ -11,11 +11,11 @@ const showingNavigationDropdown = ref(false);
 const user = usePage()?.props?.auth?.user;
 const routes = [];
 /* Add Routes here */
-const loggedInRoutes = [{ name: "Dashboard", link: "dashboard" }]
+const loggedInRoutes = []
 const loggedOutRoutes = [];
 const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }, { name: "Add Job", link: "job.create" }];
 const candidateRoutes = [{ name: "Applications", link: "application.show" }];
-const adminRoutes = [];
+const adminRoutes = [{ name: "Dashboard", link: "dashboard" }];
 /* -------------- */
 if (user) {
     routes.push(...loggedInRoutes);
@@ -30,11 +30,11 @@ if (user) {
     routes.push(...loggedOutRoutes);
 }
 
-console.log(user.role)
+console.log(user?.role)
 </script>
 
 <template>
-    <div class="z-50 ">
+    <div>
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
@@ -43,7 +43,7 @@ console.log(user.role)
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('home')">
                                 <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
@@ -64,7 +64,7 @@ console.log(user.role)
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
+                                                {{ user?.name }}
 
                                                 <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20" fill="currentColor">
@@ -77,7 +77,8 @@ console.log(user.role)
                                     </template>
 
                                     <template v-if="user" #content>
-                                        <DropdownLink :href="route(`${user.role}.profile.edit`)"> Profile
+                                        <DropdownLink v-if="user?.role !== 'admin'"
+                                            :href="route(`${user?.role}.profile.edit`)"> Profile
                                         </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
@@ -132,7 +133,9 @@ console.log(user.role)
                         </div>
 
                         <div v-if="user" class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route(`${user.role}.profile.edit`)"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink v-if="user?.role !== 'admin'" :href="route(`${user?.role}.profile.edit`)">
+                                Profile
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
