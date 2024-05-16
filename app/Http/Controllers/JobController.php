@@ -114,14 +114,43 @@ class JobController extends Controller
         return Inertia::render('Job/Jobs',  ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
     }
 
-    public function Jobs(Request $request)
-    {
-        $jobs = jobportal::with('employer')
-        ->where('status', 'accepted')
-        ->paginate(9)->withQueryString();
+    // public function Jobs(Request $request)
+    // {
+    //     $jobs = jobportal::with('employer')
+    //     ->where('status', 'accepted')
+    //     ->paginate(9)->withQueryString();
 
-        return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
+    //     return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
+    // }
+
+    public function Jobs(Request $request)
+{
+    $query = JobPortal::query();
+
+    if ($request->filled('title')) {
+        $query->where('title', 'like', '%' . $request->title . '%')
+              ->orWhere('desc', 'like', '%' . $request->title . '%');
     }
+    if ($request->filled('location')) {
+        $query->where('location', $request->location);
+    }
+    if ($request->filled('category')) {
+        $query->where('category', $request->category);
+    }
+    if ($request->filled('experience')) {
+        $query->where('experience_level', $request->experience);
+    }
+    if ($request->filled('salary')) {
+        $query->where('salary_range', $request->salary);
+    }
+    if ($request->filled('datePosted')) {
+        $query->whereDate('created_at', $request->datePosted);
+    }
+
+    $jobs = $query->where('status', 'accepted')->paginate(10)->withQueryString();
+
+    return Inertia::render('Job/Jobs', ['jobs' => $jobs]);
+}
 
 
     public function show($id)

@@ -58,7 +58,7 @@ class EmployerProfileController extends Controller
 
         $request->user()->fill($request->validated())->save();
 
-        return Redirect::route('employer.profile.show')->with('status', 'Your profile has been updated successfully.');
+        return Redirect::route('employer.profile.edit')->with('status', 'Your profile has been updated successfully.');
     }
 
     public function delete(Request $request): RedirectResponse

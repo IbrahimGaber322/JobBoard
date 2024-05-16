@@ -1,7 +1,25 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PaginationBar from '@/Components/PaginationBar.vue';
+import { ref } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
+import { Link, router } from '@inertiajs/vue3';
+const keyword =ref('title');
+const search = ref({
+  title: '',
+  location: '',
+  category: '',
+  experience: '',
+  salary: '',
+  datePosted: ''
+});
 
+
+function handleSelect(e){
+  Inertia.get('/');
+  keyword.value=e.target.value;
+  console.log(e.target.value)
+}
 const props = defineProps({
   jobs: {
     type: Array,
@@ -28,6 +46,23 @@ console.log(props.jobs.data);
 
 <template>
   <AuthenticatedLayout>
+    <!-- ---------------- -->
+    <div>
+      <select class="input-field" @change="handleSelect">
+    <option value="title">Job Title or Keywords</option>
+    <option value="location">Location</option>
+    <option value="category">Category</option>
+    <option value="experience">Experience Level</option>
+    <option value="salary">Salary Range</option>
+    <option value="datePosted">Date Posted</option>
+</select>
+
+    <input v-if="!(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword">
+    <input v-if="(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword" type="date">
+    <Link class="search-button" href="/" method="post" :data="search" as="button" type="button" @click="searchJobs">Search</Link>
+</div>
+
+  <!--  ---------------------->
     <div class="container mx-auto py-6">
       <h1 class="text-3xl font-bold mb-6">Jobs</h1>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

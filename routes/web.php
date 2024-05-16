@@ -24,6 +24,7 @@ Route::get('/', function () {
     ]);
 });
 
+Route::post('/', [JobController::class, 'Jobs'])->name('home');
 Route::get('/', [JobController::class, 'Jobs'])->name('home');
 Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
 
