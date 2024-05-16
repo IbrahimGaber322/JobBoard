@@ -47,19 +47,20 @@ console.log(props.jobs.data);
 <template>
   <AuthenticatedLayout>
     <!-- ---------------- -->
-    <div>
-      <select class="input-field" @change="handleSelect">
+    <div class="search-container">
+  <select class="input-field" @change="handleSelect">
     <option value="title">Job Title or Keywords</option>
     <option value="location">Location</option>
     <option value="category">Category</option>
     <option value="experience">Experience Level</option>
     <option value="salary">Salary Range</option>
     <option value="datePosted">Date Posted</option>
-</select>
+  </select>
 
-    <input v-if="!(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword">
-    <input v-if="(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword" type="date">
-    <Link class="search-button" href="/" method="post" :data="search" as="button" type="button" @click="searchJobs">Search</Link>
+  <input v-if="!(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword">
+  <input v-else class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword" type="date">
+
+  <a class="search-button" href="/" method="post" :data="search" @click="searchJobs">Search</a>
 </div>
 
   <!--  ---------------------->
@@ -113,16 +114,43 @@ console.log(props.jobs.data);
 </template>
 
 <style scoped>
-.overflow-hidden {
-  overflow: hidden;
-}
+  /* Style for search bar and filter */
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px; /* Reduced margin */
+  }
 
-.rounded-full {
-  border-radius: 50%;
-}
+  .input-field {
+    flex: 1; /* Take remaining space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
 
-/* Remove underline on job title hover */
-.hover\:no-underline:hover {
-  text-decoration: none;
-}
+  .search-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Responsive styles */
+  @media screen and (max-width: 600px) {
+    .search-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .input-field {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
 </style>
+

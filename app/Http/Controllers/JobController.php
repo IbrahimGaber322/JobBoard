@@ -213,34 +213,41 @@ class JobController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'desc' => 'required|string',
-            'experience_level' => 'string',
-            'responsibilities' => 'string',
-            'skills' => 'string',
-            'salary_range' => 'string',
-            // 'date' => 'date',
-            'category' => 'string',
-            'location' => 'string',
-            'work_type' => 'required|string|in:hybrid,remote,onsite',
-            // 'status' => 'string',
-            'emp_id' => 'exists:users,id',
-            'deadline' => 'date',
-            'company_name' => 'string',
-        ]);
+    public function update(Request $request, $id, CloudinaryService $cloudinaryService)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'desc' => 'required|string',
+        'experience_level' => 'string',
+        'responsibilities' => 'string',
+        'skills' => 'string',
+        'salary_range' => 'string',
+        'category' => 'string',
+        'location' => 'string',
+        'work_type' => 'required|string|in:hybrid,remote,onsite',
+        'emp_id' => 'exists:users,id',
+        'deadline' => 'date',
+        'company_name' => 'string',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        try {
-            $job = jobportal::findOrFail($id);
-            $job->update($request->all());
-            return redirect()->route('job.edit', $job->id)->with('success', 'Job updated successfully.');
-        } catch (\Exception $e) {
-            \Log::error('Error updating job:', $e);
-            return back()->withInput()->withErrors(['error' => 'An error occurred while updating the job. Please try again.']);
+    try {
+        $job = jobportal::findOrFail($id);
+        $job->update($request->all());
+
+        if ($request->hasFile('image')) {
+            $uploadedImageResponse = $cloudinaryService->uploadImage($request->file('image'));
+            $job->image = $uploadedImageResponse['secure_url'];
+            $job->save(); // Save the updated job with the new image URL
         }
+
+        return redirect()->route('job.edit', $job->id)->with('success', 'Job updated successfully.');
+    } catch (\Exception $e) {
+        \Log::error('Error updating job:', $e);
+        return back()->withInput()->withErrors(['error' => 'An error occurred while updating the job. Please try again.']);
     }
+}
+
 
 
 }

@@ -154,6 +154,7 @@ export default {
       jobImage.value = URL.createObjectURL(file);
       console.log(jobImage.value);
     }
+    
 },
     populateForm() {
       for (const field in this.form) {

@@ -74,7 +74,7 @@
           <input id="deadline" type="date" class="mt-1 block w-full" v-model="form.deadline" />
         </div>
         <div>
-          <InputLabel for="image" value="Profile Image" />
+          <InputLabel for="image" value="Job Image" />
           <input type="file" id="image" @change="handleFileUpload('image', $event)" />
           <InputError class="mt-2" :message="form.errors.image" />
         </div>
