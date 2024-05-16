@@ -103,7 +103,7 @@ class JobController extends Controller
             $isOwner = false;
         }
         return Inertia::render('Job/Jobs',  ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
-    }
+        }
 
     public function Jobs(Request $request)
     {
