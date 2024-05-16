@@ -1,11 +1,33 @@
+
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+
+const props = defineProps({
+  userApplications: {
+            type: Array,
+            required: true,
+            default: null
+        }
+})
+
+const markStatus = (status, applicationId) => {
+  Inertia.post(route('app-accept.update'), { id: applicationId, status: status });
+};
+
+
+
 </script>
+
 <template>
     <AuthenticatedLayout>
         <div class="container mx-auto py-6">
             <h1 class="text-2xl font-bold mb-4">Applications</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Check if there are user applications, if not, display a message -->
+            <div v-if="!userApplications || userApplications.length === 0" class="text-gray-700">
+                No applications have been submitted yet.
+            </div>
+            <!-- If there are user applications, display each application -->
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div v-for="application in userApplications" :key="application.id"
                     class="bg-white rounded-lg shadow-md p-4">
                     <div class="mb-4">
@@ -36,7 +58,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </button>
 
                             <button @click="markStatus('Accepted', application.id)" :class="{
-                                'text-red-600 hover:underline': application.status === 'pending' || application.status === 'Rejected',
+                                'text-blue-600 hover:underline': application.status === 'pending' || application.status === 'Rejected',
                                 'text-gray-400 cursor-not-allowed': application.status === 'Accepted'
                             }" :disabled="application.status === 'Accepted'">
                                 Mark Accepted
@@ -50,22 +72,3 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 </template>
 
 
-<script>
-export default {
-    props: {
-        userApplications: {
-            type: Array,
-            required: true,
-            default: null
-        }
-    },
-    methods: {
-        markStatus(status, applicationId) {
-            console.log(applicationId)
-            console.log(status)
-            this.$inertia.post(route('app-accept.update'), { id: applicationId, status: status });
-        }
-
-    }
-}
-</script>

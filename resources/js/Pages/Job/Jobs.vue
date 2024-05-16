@@ -70,8 +70,7 @@ console.log(props.jobs.data);
         <div v-if="props.jobs.data" v-for="job in props.jobs.data" :key="job?.id">
           <div v-if="props.isOwner || job?.status === 'accepted'"
             class="bg-white rounded-lg shadow-md overflow-hidden p-6 flex flex-col items-center">
-            <!-- Display user image if available -->
-            <div v-if="job?.employer && job?.image" class="mb-6 flex justify-center">
+            <div v-if="job?.image" class="mb-6 flex justify-center">
               <div class="w-32 h-32 rounded-full overflow-hidden">
                 <img :src="job?.image" alt="User Image" class="w-full h-full object-cover rounded-full">
               </div>
@@ -114,6 +113,17 @@ console.log(props.jobs.data);
 </template>
 
 <style scoped>
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.rounded-full {
+  border-radius: 50%;
+}
+
+.hover\:no-underline:hover {
+  text-decoration: none;
+}
   /* Style for search bar and filter */
   .search-container {
     display: flex;

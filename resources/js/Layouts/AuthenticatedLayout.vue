@@ -13,8 +13,8 @@ const routes = [];
 /* Add Routes here */
 const loggedInRoutes = []
 const loggedOutRoutes = [];
-const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }, { name: "Add Job", link: "job.create" }];
-const candidateRoutes = [{ name: "Applications", link: "application.show" }];
+const employerRoutes = [{ name: "My Jobs", link: "job.employerJobs" }, { name: "Add Job", link: "job.create" }, { name: "Applications", link: "application.show" } ];
+const candidateRoutes = [{ name: "Applied Jobs", link: "application.showapplied" }, { name: "Accepted", link: "app.news" }, { name: "Rejected", link: "app.badnews" }];
 const adminRoutes = [{ name: "Dashboard", link: "dashboard" }];
 /* -------------- */
 if (user) {
@@ -24,7 +24,7 @@ if (user) {
     } else if (user?.role === "employer") {
         routes.push(...employerRoutes);
     } else if (user?.role === "candidate") {
-        candidateRoutes.push(...candidateRoutes);
+        routes.push(...candidateRoutes);
     }
 } else {
     routes.push(...loggedOutRoutes);
