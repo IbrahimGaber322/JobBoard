@@ -33,20 +33,23 @@ class JobController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
-            'experience_level' => 'string',
-            'responsibilities' => 'string',
-            'skills' => 'string',
-            'salary_range' => 'string',
+            // 'experience_level' => 'string',
+            // 'responsibilities' => 'string',
+            // 'skills' => 'string',
+            // 'salary_range' => ['nullable', 'regex:/^\d+(\.\d{1,2})?$/'], 
+            'salary_range' => ['nullable', 'regex:/^(?!(?:-))[a-zA-Z0-9.]*$/'],
             // 'date' => 'date',
-            'category' => 'string',
-            'location' => 'string',
+            // 'category' => 'string',
+            // 'location' => 'string',
             'work_type' => 'required|string|in:hybrid,remote,onsite',
             // 'status' => 'string',
             // 'emp_id' => 'exists:users,id',
             // 'no_of_candidates' => 'integer',
-            'deadline' => 'date',
+            // 'deadline' => 'date',
+            'deadline' => 'required|date|after_or_equal:today',
             'company_name' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+      
         ]);
   // Inside the store method
         // $employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
@@ -79,9 +82,10 @@ class JobController extends Controller
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
             'image' => $imageUrl
+            
         ]);
 
-        // return redirect()->route('job.create')->with('success', 'Job created successfully.');
+        return redirect()->route('job.create')->with('success', 'Job created successfully.');
     }
 
     public function employerJobs(Request $request)
@@ -189,17 +193,19 @@ class JobController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
-            'experience_level' => 'string',
-            'responsibilities' => 'string',
-            'skills' => 'string',
-            'salary_range' => 'string',
+            // 'experience_level' => 'string',
+            // 'responsibilities' => 'string',
+            // 'skills' => 'string',
+            // 'salary_range' => 'string',
+            'salary_range' => ['nullable', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
             // 'date' => 'date',
-            'category' => 'string',
-            'location' => 'string',
+            // 'category' => 'string',
+            // 'location' => 'string',
             'work_type' => 'required|string|in:hybrid,remote,onsite',
             // 'status' => 'string',
-            'emp_id' => 'exists:users,id',
-            'deadline' => 'date',
+            // 'emp_id' => 'exists:users,id',
+            // 'deadline' => 'date',
+            'deadline' => 'required|date|after_or_equal:today',
             'company_name' => 'string',
         ]);
 
@@ -215,4 +221,3 @@ class JobController extends Controller
 
 
 }
-

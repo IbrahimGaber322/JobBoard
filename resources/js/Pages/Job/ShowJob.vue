@@ -1,47 +1,77 @@
+<script setup>
+  import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+</script>
+
 <template>
-  <div v-if="isEmployer || job.status === 'accepted'" class="flex justify-center items-center h-screen">
-    <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center">
-          <div v-if="isEmployer && job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
-            <img :src="job.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
+  <AuthenticatedLayout>
+    <div v-if="isEmployer || job.status === 'accepted'" class="flex justify-center items-center h-screen">
+      <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8 mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center">
+            <div v-if=" job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
+              <img :src="job.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
+            </div>
+            <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
+              <span class="text-gray-500 text-lg font-semibold">🏢</span>
+            </div>
+            <h1 class="text-2xl font-bold">{{ job.company_name }}</h1>
           </div>
-          <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
-            <span class="text-gray-500 text-lg font-semibold">Company Logo</span>
+          <div class="flex items-center">
+            <button v-if="isEmployer" @click="editJob" class="text-blue-600 hover:underline mr-2">
+              Edit Job
+            </button>
+            <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">
+              Delete Job
+            </button>
           </div>
-          <h1 class="text-2xl font-bold">{{ job.company_name }}</h1>
         </div>
-        <div class="flex items-center">
-          <button v-if="isEmployer" @click="editJob" class="text-blue-600 hover:underline mr-2">
-            Edit Job
-          </button>
-          <button v-if="isEmployer" @click="deleteJob" class="text-red-600 hover:underline">
-            Delete Job
-          </button>
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Job Details</h2>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="col-span-2 md:col-span-1">
+              <p class="text-gray-700"><strong>Title:</strong> {{ job.title }}</p>
+              <p class="text-gray-700"><strong>Salary Range:</strong> {{ job.salary_range }}</p>
+              <p class="text-gray-700"><strong>Category:</strong> {{ job.category }}</p>
+              <p class="text-gray-700"><strong>Location:</strong> {{ job.location }}</p>
+              <p class="text-gray-700"><strong>Work Type:</strong> {{ job.work_type }}</p>
+              <p v-if="isEmployer" class="text-gray-700"><strong>Status:</strong> {{ job.status }}</p>
+              <p class="text-gray-700"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
+              <p v-if="isEmployer" class="text-gray-700"><strong>Number of Candidates:</strong> {{ job.no_of_candidates }}</p>
+            </div>
+          </div>
         </div>
+        <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied && !deadlinePassed">
+          🚀 Submit Application
+        </button>
+        <p v-if="isCandidate && !hasApplied && deadlinePassed" class="text-red-500">⏰ Deadline has passed</p>
+        <button v-if="isCandidate && hasApplied" @click="markStatus('Cancelled', appId)" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
+          🚫 Cancel Application
+        </button>
       </div>
-      <div>
-        <h2 class="text-xl font-semibold mb-2">Job Details</h2>
-        <p class="text-gray-700 mb-2"><strong>Title:</strong> {{ job.title }}</p>
-        <p class="text-gray-700 mb-2"><strong>Description:</strong> {{ job.desc }}</p>
-        <p class="text-gray-700 mb-2"><strong>Experience Level:</strong> {{ job.experience_level }}</p>
-        <p class="text-gray-700 mb-2"><strong>Responsibilities:</strong> {{ job.responsibilities }}</p>
-        <p class="text-gray-700 mb-2"><strong>Skills:</strong> {{ job.skills }}</p>
-        <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Number of Candidates:</strong> {{ job.no_of_candidates }}</p>
-        <p class="text-gray-700 mb-2"><strong>Salary Range:</strong> {{ job.salary_range }}</p>
-        <p class="text-gray-700 mb-2"><strong>Category:</strong> {{ job.category }}</p>
-        <p class="text-gray-700 mb-2"><strong>Location:</strong> {{ job.location }}</p>
-        <p class="text-gray-700 mb-2"><strong>Work Type:</strong> {{ job.work_type }}</p>
-        <p v-if="isEmployer" class="text-gray-700 mb-2"><strong>Status:</strong> {{ job.status }}</p>
-        <p class="text-gray-700 mb-2"><strong>Deadline:</strong> {{ formatDeadline(job.deadline) }}</p>
-      </div>
-      <button @click="apply" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600" v-if="isCandidate && !hasApplied && !deadlinePassed">
-        Submit Application
-      </button>
-      <p v-if="isCandidate && !hasApplied && deadlinePassed" class="text-red-500" >Deadline has passed</p>
-      <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', appId)">Cancel</button>
-    </div>
+      <!-- Additional Information Card -->
+      <div class="bg-white p-8 rounded-lg shadow-xl" style="margin-top: -30px;">
+  <h2 class="text-2xl font-semibold mb-4">Additional Information</h2>
+  <div class="border-b-2 border-gray-200 mb-6"></div> 
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2 text-gray-800">Description</h3>
+    <p class="text-base text-gray-700">{{ job.desc }}</p>
   </div>
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2 text-gray-800">Responsibilities</h3>
+    <ul class="list-disc list-inside text-base text-gray-700">
+      {{ job.responsibilities }}
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-2 text-gray-800">Skills</h3>
+    <ul class="list-disc list-inside text-base text-gray-700">
+      {{ job.skills }}
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </AuthenticatedLayout>
 </template>
 
 <script>
