@@ -140,6 +140,10 @@ class JobController extends Controller
             ->where('user_id', $userId)
             ->whereIn('status', ['pending', 'Accepted', 'Rejected'])
             ->exists();
+            $isPending = Application::where('job_id', $id)
+            ->where('user_id', $userId)
+            ->where('status', 'pending')
+            ->exists();
             $appId = null;
 
             if ($hasApplied) {
@@ -160,7 +164,7 @@ class JobController extends Controller
             $appId = null;
         }
 
-        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
+        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId, 'isPending' => $isPending]);
     }
 
 

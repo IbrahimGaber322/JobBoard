@@ -39,7 +39,7 @@
         Submit Application
       </button>
       <p v-if="isCandidate && !hasApplied && deadlinePassed" class="text-red-500" >Deadline has passed</p>
-      <button v-if="isCandidate && hasApplied"  @click="markStatus('Cancelled', appId)">Cancel</button>
+      <button v-if="isCandidate && hasApplied && isPending"  @click="markStatus('Cancelled', appId)">Cancel</button>
     </div>
   </div>
 </template>
@@ -56,6 +56,10 @@ export default {
       required: true
     },
     hasApplied: {
+      type: Boolean,
+      default: false
+    },
+    isPending: {
       type: Boolean,
       default: false
     },
