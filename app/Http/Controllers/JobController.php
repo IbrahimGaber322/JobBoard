@@ -33,20 +33,13 @@ class JobController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
-            'experience_level' => 'string',
-            'responsibilities' => 'string',
-            'skills' => 'string',
-            'salary_range' => 'string',
-            // 'date' => 'date',
-            'category' => 'string',
-            'location' => 'string',
+            'salary_range' => ['nullable', 'regex:/^(?!(?:-))[a-zA-Z0-9.]*$/'],
             'work_type' => 'required|string|in:hybrid,remote,onsite',
-            // 'status' => 'string',
-            // 'emp_id' => 'exists:users,id',
-            // 'no_of_candidates' => 'integer',
-            'deadline' => 'date',
+         
+            'deadline' => 'required|date|after_or_equal:today',
             'company_name' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+      
         ]);
   // Inside the store method
         // $employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
@@ -68,20 +61,18 @@ class JobController extends Controller
             'responsibilities' => $request->responsibilities,
             'skills' => $request->skills,
             'salary_range' => $request->salary_range,
-            // 'date' => $request->date,
             'category' => $request->category,
             'location' => $request->location,
             'work_type' => $request->work_type,
-            // 'status' => $request->status,
-            // 'emp_id' => $request->emp_id,
+           
             'emp_id' => $userId,
-            // 'no_of_candidates' => $request->no_of_candidates,
             'deadline' => $request->deadline,
             'company_name' => $request->company_name,
             'image' => $imageUrl
+            
         ]);
 
-        // return redirect()->route('job.create')->with('success', 'Job created successfully.');
+        return redirect()->route('job.create')->with('success', 'Job created successfully.');
     }
 
     public function employerJobs(Request $request)
@@ -112,7 +103,7 @@ class JobController extends Controller
             $isOwner = false;
         }
         return Inertia::render('Job/Jobs',  ['jobs' => $jobs, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'isOwner' => $isOwner]);
-    }
+        }
 
     public function Jobs(Request $request)
     {
@@ -193,17 +184,9 @@ class JobController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'desc' => 'required|string',
-            'experience_level' => 'string',
-            'responsibilities' => 'string',
-            'skills' => 'string',
-            'salary_range' => 'string',
-            // 'date' => 'date',
-            'category' => 'string',
-            'location' => 'string',
+            'salary_range' => ['nullable', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
             'work_type' => 'required|string|in:hybrid,remote,onsite',
-            // 'status' => 'string',
-            'emp_id' => 'exists:users,id',
-            'deadline' => 'date',
+            'deadline' => 'required|date|after_or_equal:today',
             'company_name' => 'string',
         ]);
 
@@ -219,4 +202,3 @@ class JobController extends Controller
 
 
 }
-
