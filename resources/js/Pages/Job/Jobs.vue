@@ -47,21 +47,20 @@ console.log(props.jobs.data);
 <template>
   <AuthenticatedLayout>
     <!-- ---------------- -->
-    <div class="search-container">
-  <select class="input-field" @change="handleSelect">
-    <option value="title">Job Title or Keywords</option>
-    <option value="location">Location</option>
-    <option value="category">Category</option>
-    <option value="experience">Experience Level</option>
-    <option value="salary">Salary Range</option>
-    <option value="datePosted">Date Posted</option>
-  </select>
+    <div class="search-container mt-4">
+      <select class="input-field" @change="handleSelect">
+        <option value="title">Job Title or Keywords</option>
+        <option value="location">Location</option>
+        <option value="category">Category</option>
+        <option value="experience">Experience Level</option>
+        <option value="salary">Salary Range</option>
+        <option value="datePosted">Date Posted</option>
+      </select>
 
-  <input v-if="!(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword">
-  <input v-else class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword" type="date">
-
-  <a class="search-button" href="/" method="post" :data="search" @click="searchJobs">Search</a>
-</div>
+      <input v-if="!(keyword==='datePosted')" class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword">
+      <input v-else class="input-field" v-model="search[keyword]" :placeholder="'Enter ' + keyword" type="date">
+      <Link class="search-button" href="/" method="post" :data="search" as="button" type="button" @click="searchJobs">Search</Link>
+    </div>
 
   <!--  ---------------------->
     <div class="container mx-auto py-6">
@@ -130,6 +129,7 @@ console.log(props.jobs.data);
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px; /* Reduced margin */
+    margin-top: 20px; /* Added top margin */
   }
 
   .input-field {

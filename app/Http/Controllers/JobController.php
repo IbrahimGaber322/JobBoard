@@ -175,7 +175,7 @@ class JobController extends Controller
             $appId = null;
         }
 
-        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId, 'isPending' => $isPending]);
+        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
     }
 
 
@@ -199,7 +199,7 @@ class JobController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, CloudinaryService $cloudinaryService)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -222,7 +222,7 @@ class JobController extends Controller
 
         return redirect()->route('job.edit', $job->id)->with('success', 'Job updated successfully.');
     } catch (\Exception $e) {
-        \Log::error('Error updating job:', $e);
+       // \Log::error('Error updating job:', $e);
         return back()->withInput()->withErrors(['error' => 'An error occurred while updating the job. Please try again.']);
     }
 }

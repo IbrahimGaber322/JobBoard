@@ -9,7 +9,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center">
             <div v-if="job.image" class="w-20 h-20 rounded-full overflow-hidden mr-4">
-              <img :src="job.image" alt="Company Logo" class="w-full h-full object-cover rounded-full">
+              <img :src="job.image" alt=" Logo" class="w-full h-full object-cover rounded-full">
             </div>
             <div v-else class="w-20 h-20 rounded-full bg-gray-200 flex justify-center items-center mr-4">
               <span class="text-gray-500 text-lg font-semibold">🏢</span>

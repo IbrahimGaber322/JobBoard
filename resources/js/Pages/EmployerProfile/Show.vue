@@ -3,8 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 </script>
 <template>
   <AuthenticatedLayout>
-    <div class="flex justify-center items-center pt-52">
-      <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-8">
+    <div class="flex justify-center items-center pt-20">
+      <div class="max-w-lg w-full bg-white shadow-md rounded-lg p-20">
 
         <div class="relative w-20 h-20 rounded-full overflow-hidden mr-4 bg-gray-200 ">
           <img v-if="user && user.image" :src="user.image" alt="Profile Image"

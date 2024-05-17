@@ -1,23 +1,6 @@
-
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-
-const props = defineProps({
-  userApplications: {
-            type: Array,
-            required: true,
-            default: null
-        }
-})
-
-const markStatus = (status, applicationId) => {
-  Inertia.post(route('app-accept.update'), { id: applicationId, status: status });
-};
-
-
-
 </script>
-
 <template>
     <AuthenticatedLayout>
         <div class="container mx-auto py-6">
@@ -72,3 +55,21 @@ const markStatus = (status, applicationId) => {
 </template>
 
 
+<script>
+export default {
+    props: {
+        userApplications: {
+            type: Array,
+            required: true,
+            default: null
+        }
+    },
+    methods: {
+        markStatus(status, applicationId) {
+            this.$inertia.post(route('app-accept.update'), { id: applicationId, status: status });
+            window.alert(`Application marked as ${status}`);
+        }
+
+    }
+}
+</script>
