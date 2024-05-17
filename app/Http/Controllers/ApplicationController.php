@@ -46,20 +46,20 @@ class ApplicationController extends Controller
         $employerId = Auth::id();
         $applications = Application::where('emp_id', $employerId)
             ->with('job', 'candidate')
-            ->get();
+            ->paginate(1)->withQueryString();
 
-        $userApplications = $applications->map(function ($application) {
-            return [
-                'id' => $application->id,
-                'candidate_name' => $application->candidate->name,
-                'candidate_id' => $application->candidate->id,
-                'job_title' => $application->job->title,
-                'candidate_email' => $application->candidate->email,
-                'date_of_application' => $application->created_at->toDateString(),
-                'status' => $application->status,
-            ];
-        });
-        return Inertia::render('Applications/show', ['userApplications' => $userApplications]);
+        // $userApplications = $applications->map(function ($application) {
+        //     return [
+        //         'id' => $application->id,
+        //         'candidate_name' => $application->candidate->name,
+        //         'candidate_id' => $application->candidate->id,
+        //         'job_title' => $application->job->title,
+        //         'candidate_email' => $application->candidate->email,
+        //         'date_of_application' => $application->created_at->toDateString(),
+        //         'status' => $application->status,
+        //     ];
+        // });
+        return Inertia::render('Applications/show', ['userApplications' => $applications]);
     }
 
     public function showAcceptedJobs()

@@ -130,6 +130,7 @@ console.log(props.jobs.data);
     justify-content: space-between;
     margin-bottom: 10px; /* Reduced margin */
     margin-top: 20px; /* Added top margin */
+    padding: 40px;
   }
 
   .input-field {

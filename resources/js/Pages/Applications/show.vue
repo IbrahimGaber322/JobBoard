@@ -1,5 +1,16 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PaginationBar from '@/Components/PaginationBar.vue';
+
+const props = defineProps({
+    userApplications: {
+            type: Array,
+            required: true,
+            default: null
+        }
+
+});
+console.log(props.userApplications)
 </script>
 <template>
     <AuthenticatedLayout>
@@ -11,23 +22,23 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
             </div>
             <!-- If there are user applications, display each application -->
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div v-for="application in userApplications" :key="application.id"
+                <div v-for="application in userApplications.data" :key="application.id"
                     class="bg-white rounded-lg shadow-md p-4">
                     <div class="mb-4">
                         <h2 class="text-lg font-semibold mb-2">
-                            <a :href="`/candidate/${application.candidate_id}`" class="text-black hover:text-blue-600">
-                                {{ application.candidate_name }}
+                            <a :href="`/candidate/${application.candidate.id}`" class="text-black hover:text-blue-600">
+                                {{ application.candidate.name }}
                             </a>
                         </h2>
 
                         <div class="flex items-center text-gray-500 mb-1">
-                            <span>job title: {{ application.job_title }}</span>
+                            <span>job title: {{ application.job.title }}</span>
                         </div>
                         <div class="flex items-center text-gray-500 mb-1">
-                            <span>candidate email: {{ application.candidate_email }}</span>
+                            <span>candidate email: {{ application.candidate.email }}</span>
                         </div>
                         <div class="flex items-center text-gray-500 mb-1">
-                            <span>applied in : {{ application.date_of_application }}</span>
+                            <span>applied in : {{ formatDeadline(application.created_at) }}</span>
                         </div>
                         <div class="flex items-center text-gray-500">
                             <span>status: {{ application.status }}</span>
@@ -51,24 +62,22 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 </div>
             </div>
         </div>
+        <PaginationBar class=" mt-auto" :links="props.userApplications.links" />
     </AuthenticatedLayout>
 </template>
 
 
 <script>
 export default {
-    props: {
-        userApplications: {
-            type: Array,
-            required: true,
-            default: null
-        }
-    },
+
     methods: {
         markStatus(status, applicationId) {
             this.$inertia.post(route('app-accept.update'), { id: applicationId, status: status });
             window.alert(`Application marked as ${status}`);
-        }
+        },
+        formatDeadline(deadline) {
+      return new Date(deadline).toLocaleDateString();
+    },
 
     }
 }
