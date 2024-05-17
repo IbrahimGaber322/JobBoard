@@ -6,11 +6,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
         <div class="container mx-auto py-6">
             <h1 class="text-2xl font-bold mb-4">Accepted Jobs</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Check if there are accepted jobs, if not, display a message -->
                 <div v-if="!acceptedJobs.length" class="text-gray-700">
                     You haven't been accepted for any job yet.
                 </div>
-                <!-- If there are accepted jobs, display each job card -->
                 <div
                     v-else
                     v-for="job in acceptedJobs"
