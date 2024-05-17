@@ -147,6 +147,8 @@ export default {
     markStatus(status, applicationId) {
       console.log('Marking status:', status, 'for application ID:', applicationId);
       this.$inertia.post(route('app.update'), { id: applicationId, status: status });
+      window.alert(`Application marked as ${status}`);
+
     },
     editJob() {
       window.location.href = `/job/${this.job.id}/edit`;
