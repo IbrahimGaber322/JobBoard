@@ -154,7 +154,6 @@ export default {
     checkDeadline() {
       const deadlineDate = new Date(this.job.deadline);
       const currentDate = new Date();
-
       if (currentDate > deadlineDate) {
         this.deadlinePassed = true;
       }
