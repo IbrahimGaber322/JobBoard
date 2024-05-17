@@ -11,6 +11,7 @@ const button_prev_url = ref(null);
 const button_next_url = ref(null);
 
 const init = (limit) => {
+    console.log('Props links:', props.links);
     let links = props.links;
     let selected_index = null;
 

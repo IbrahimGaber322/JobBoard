@@ -1,6 +1,23 @@
+
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+
+const props = defineProps({
+  userApplications: {
+            type: Array,
+            required: true,
+            default: null
+        }
+})
+
+const markStatus = (status, applicationId) => {
+  Inertia.post(route('app-accept.update'), { id: applicationId, status: status });
+};
+
+
+
 </script>
+
 <template>
     <AuthenticatedLayout>
         <div class="container mx-auto py-6">
@@ -41,7 +58,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                             </button>
 
                             <button @click="markStatus('Accepted', application.id)" :class="{
-                                'text-red-600 hover:underline': application.status === 'pending' || application.status === 'Rejected',
+                                'text-blue-600 hover:underline': application.status === 'pending' || application.status === 'Rejected',
                                 'text-gray-400 cursor-not-allowed': application.status === 'Accepted'
                             }" :disabled="application.status === 'Accepted'">
                                 Mark Accepted
@@ -55,22 +72,3 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 </template>
 
 
-<script>
-export default {
-    props: {
-        userApplications: {
-            type: Array,
-            required: true,
-            default: null
-        }
-    },
-    methods: {
-        markStatus(status, applicationId) {
-            console.log(applicationId)
-            console.log(status)
-            this.$inertia.post(route('app-accept.update'), { id: applicationId, status: status });
-        }
-
-    }
-}
-</script>
