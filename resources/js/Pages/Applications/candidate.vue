@@ -8,8 +8,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                 <h1 class="text-2xl font-bold mb-4">Candidate Details</h1>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="col-span-1 md:col-span-2 lg:col-span-3">
-                        <!-- <img :src="candidate.image" alt="Candidate Image" class="w-full h-auto mb-4"> -->
-                        <h2 class="text-lg font-semibold mb-2">{{ candidate.name }}</h2>
+                        <div class="flex items-center mb-2">
+                            <div class="relative w-20 h-20 rounded-full overflow-hidden mr-4 bg-gray-200">
+                                <img v-if="candidate && candidate.image" :src="candidate.image" alt="candidate Image"
+                                    class="w-full h-full object-cover rounded-full">
+                                <img v-else :src="imageUrl" alt="Default Profile Image"
+                                    class="w-full h-full object-cover rounded-full">
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold">{{ candidate.name }}</h2>
+                            </div>
+                        </div>
                         <p>Email: {{ candidate.email }}</p>
                         <p>Gender: {{ candidate.gender }}</p>
                         <p>Telephone: {{ candidate.telephone }}</p>
@@ -17,7 +26,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
                         <p>Title: {{ candidate.title }}</p>
                         <p>Skills: {{ candidate.skills }}</p>
                         <p>Experience: {{ candidate.experience }}</p>
-                        <a :href="candidate.resume" class="text-blue-600 hover:underline" @click.prevent="downloadResume">Download Resume</a>
+                        <a :href="candidate.resume" class="text-blue-600 hover:underline"
+                            @click.prevent="downloadResume">Download Resume</a>
                     </div>
                 </div>
             </div>

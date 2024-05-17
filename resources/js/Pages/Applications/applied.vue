@@ -6,11 +6,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
       <div class="container mx-auto py-6">
           <h1 class="text-2xl font-bold mb-4">Applied Jobs</h1>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <!-- Check if there are applied jobs, if not, display a message -->
               <div v-if="!appliedJobs.length" class="text-gray-700">
                   You haven't applied to any job yet.
               </div>
-              <!-- If there are applied jobs, display each job card -->
               <div
                   v-else
                   v-for="job in appliedJobs"

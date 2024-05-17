@@ -1,17 +1,16 @@
-
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const props = defineProps({
-  userApplications: {
-            type: Array,
-            required: true,
-            default: null
-        }
+    userApplications: {
+        type: Array,
+        required: true,
+        default: null
+    }
 })
 
 const markStatus = (status, applicationId) => {
-  Inertia.post(route('app-accept.update'), { id: applicationId, status: status });
+    Inertia.post(route('app-accept.update'), { id: applicationId, status: status });
 };
 
 
@@ -22,11 +21,9 @@ const markStatus = (status, applicationId) => {
     <AuthenticatedLayout>
         <div class="container mx-auto py-6">
             <h1 class="text-2xl font-bold mb-4">Applications</h1>
-            <!-- Check if there are user applications, if not, display a message -->
             <div v-if="!userApplications || userApplications.length === 0" class="text-gray-700">
                 No applications have been submitted yet.
             </div>
-            <!-- If there are user applications, display each application -->
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div v-for="application in userApplications" :key="application.id"
                     class="bg-white rounded-lg shadow-md p-4">
@@ -70,5 +67,3 @@ const markStatus = (status, applicationId) => {
         </div>
     </AuthenticatedLayout>
 </template>
-
-
