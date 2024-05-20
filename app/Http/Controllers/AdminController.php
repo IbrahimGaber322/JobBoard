@@ -179,6 +179,18 @@ public function notifications()
     return Inertia::render('admin/notifications', [
         'notifications' => $notifications,
     ]);
+
+}
+public function notificationsCount()
+{
+    // Get the authenticated admin user
+    $admin = auth()->user();
+
+    // Get the count of unread notifications for the admin user
+    $unreadNotificationsCount = $admin->unreadNotifications()->count();
+
+    // Return the count as a JSON response
+    return response()->json(['count' => $unreadNotificationsCount]);
 }
 
 

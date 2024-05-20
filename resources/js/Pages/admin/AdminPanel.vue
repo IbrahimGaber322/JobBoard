@@ -1,19 +1,19 @@
 <template>
   <div>
-  <!-- Navbar -->
-<nav class="bg-gray-800 p-4 flex justify-between items-center">
-  <!-- Logo -->
-  <div class="text-white font-bold text-xl">Admin Panel</div>
-  <!-- Notification Icon -->
-  <div class="text-white">
-    <a href="/admin/notifications" class="block">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-      </svg>
-    </a>
-  </div>
-</nav>
-
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="text-white font-bold text-xl">Admin Panel</div>
+      <!-- Notification Icon with Counter -->
+      <div class="text-white relative">
+        <a href="/admin/notifications" class="block">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+          </svg>
+          <span v-if="notificationCount > 0" class="notification-counter">{{ notificationCount }}</span>
+        </a>
+      </div>
+    </nav>
 
     <!-- Main Content -->
     <div class="container mx-auto flex flex-col items-center justify-center h-screen">
@@ -62,8 +62,27 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+  data() {
+    return {
+      notificationCount: 0
+    };
+  },
+  created() {
+    this.fetchNotificationCount();
+  },
   methods: {
+    fetchNotificationCount() {
+      axios.get('/admin/notifications/count') // Assuming you have an endpoint to fetch notification count
+        .then(response => {
+          this.notificationCount = response.data.count;
+        })
+        .catch(error => {
+          console.error('Error fetching notification count:', error);
+        });
+    },
     redirectToJobPostings() {
       window.location.href = '/admin/job-postings';
     },
@@ -79,3 +98,18 @@ export default {
   }
 }
 </script>
+<style>
+/* Your existing styles go here */
+
+/* Style for notification counter */
+.notification-counter {
+  background-color: #e53e3e; /* Red color */
+  color: white;
+  font-size: 0.75rem; /* Make the font size smaller */
+  padding: 0.1rem 0.4rem; /* Adjust padding */
+  border-radius: 999px; /* Make it rounded */
+  position: absolute;
+  top: -0.5rem; /* Position it above the icon */
+  right: -0.5rem; /* Position it to the right of the icon */
+}
+</style>
