@@ -9,7 +9,7 @@
 
             <div class="container mx-auto">
                 <div class="flex justify-center">
-                    <h1 class="text-4xl font-bold mt-5 text-blue-900">accepted Job Postings</h1>
+                    <h1 class="text-4xl font-bold mt-5 text-blue-900">Approved Job Postings</h1>
                 </div>
                 <div class="flex justify-center items-center">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10 mb-10">
