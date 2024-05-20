@@ -43,7 +43,6 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     Route::get('/admin/rejected-job-postings', [AdminController::class, 'manageRejectedJobPostings'])->name('admin.rejectedJobPostings');
     Route::post('/admin/job-postings/update', [AdminController::class, 'update'])->name('admin.jobPostings.update');
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/job-postings-dashboard', [AdminController::class, 'countJobPostingsByStatus'])->name('admin.jobCounts');
     Route::get('/admin/employee-job-statistics', [AdminController::class, 'getEmployeeJobStatistics'])
         ->name('admin.employeeJobStatistics');
     Route::get('/admin/candidate-applications', [AdminController::class, 'getCandidateApplications'])->name('admin.candidateApplications');

@@ -65,21 +65,31 @@ class AdminController extends Controller
     // Return a JSON response indicating success
     return response()->json(['message' => 'Job posting updated successfully']);
 }
-
-    public function dashboard()
+public function dashboard()
 {
-    // Count the total number of users except admins
+    // Fetch necessary data
     $totalUsers = User::where('role', '!=', User::ROLE_ADMIN)->count();
-
-    // Count the total number of job postings
     $totalJobs = JobPortal::count();
+    $jobCounts = [
+        'accepted' => JobPortal::where('status', 'accepted')->count(),
+        'pending' => JobPortal::where('status', 'pending')->count(),
+        'rejected' => JobPortal::where('status', 'rejected')->count(),
+    ];
+    $employersCount = $this->countEmployers();
+    $candidatesCount = $this->countCandidates();
 
-    // Render the admin dashboard view and pass the data
+    // Render the view and pass the data
     return Inertia::render('admin/dashboard', [
         'totalUsers' => $totalUsers,
-        'totalJobs' => $totalJobs,
+        'totalJobs' => $totalJobs, // Make sure to include this line
+        'jobCounts' => $jobCounts,
+        'employersCount' => $employersCount,
+        'candidatesCount' => $candidatesCount,
     ]);
 }
+
+
+
 
 public function countJobPostingsByStatus()
 {
