@@ -34,6 +34,7 @@ Route::get('/job/{id}', [JobController::class, 'show'])->name('job.show');
 //Routes for admins only
 Route::middleware([EnsureIsAdmin::class])->group(function () {
     // Define routes for admin panel
+    Route::post('/admin/notifications/{notificationId}/mark-as-read', 'AdminController@markNotificationAsRead');
     Route::get('/admin/notifications/count', [AdminController::class, 'notificationsCount']);
     Route::get('/admin/notifications', [AdminController::class, 'notifications'])->name('admin.notifications')->middleware('auth');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');

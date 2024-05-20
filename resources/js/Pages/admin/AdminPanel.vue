@@ -13,7 +13,14 @@
           <span v-if="notificationCount > 0" class="notification-counter">{{ notificationCount }}</span>
         </a>
       </div>
+      <!-- Logout Icon -->
+      <div class="text-white">
+        <svg @click="logout" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </div>
     </nav>
+
 
     <!-- Main Content -->
     <div class="container mx-auto flex flex-col items-center justify-center h-screen">
@@ -75,7 +82,7 @@ export default {
   },
   methods: {
     fetchNotificationCount() {
-      axios.get('/admin/notifications/count') // Assuming you have an endpoint to fetch notification count
+      axios.get('/admin/notifications/count')
         .then(response => {
           this.notificationCount = response.data.count;
         })
@@ -94,14 +101,21 @@ export default {
     },
     redirectToAdminDashboard(){
       window.location.href = '/admin/dashboard';
+    },
+    logout() {
+      axios.post('/logout') // Assuming you have a logout route
+        .then(() => {
+          window.location.href = '/'; // Redirect to login page after logout
+        })
+        .catch(error => {
+          console.error('Error logging out:', error);
+        });
     }
   }
 }
 </script>
 <style>
-/* Your existing styles go here */
 
-/* Style for notification counter */
 .notification-counter {
   background-color: #e53e3e; /* Red color */
   color: white;

@@ -193,6 +193,15 @@ public function notificationsCount()
     return response()->json(['count' => $unreadNotificationsCount]);
 }
 
+public function markNotificationAsRead($notificationId)
+{
+    $notification = DatabaseNotification::findOrFail($notificationId);
+
+    // Mark the notification as read
+    $notification->markAsRead();
+
+    return response()->json(['message' => 'Notification marked as read successfully']);
+}
 
 
 }
