@@ -15,12 +15,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10 mb-10">
                         <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id" class="relative">
                             <div class="bg-white rounded-lg shadow-md p-6 w-full md:w-5/6 lg:w-8/10 jobCard">
-                                <h2 class="text-lg font-semibold mb-4">{{ pendingJob.title }}</h2>
+                                <h2 class="text-lg font-semibold mb-4 text-blue-900">{{ pendingJob.title }}</h2>
                                 <p class="text-gray-700 mb-4 description">{{ pendingJob.desc }}</p>
                                 <div class="text-gray-700 mb-4">
-                                    <p class="font-semibold">Category:</p>
+                                    <p class="font-semibold text-blue-900">Category:</p>
                                     <p class="italic">{{ pendingJob.category }}</p>
-                                    <p class="font-semibold">Location:</p>
+                                    <p class="font-semibold text-blue-900">Location:</p>
                                     <p class="italic">{{ pendingJob.location }}</p>
                                 </div>
                                 <div class="flex justify-between items-center">
@@ -40,11 +40,10 @@
 import Navbar from './Navbar.vue';
 
 export default {
-    
     name: 'JobPostings',
     components: {
-    Navbar // Register the Navbar component
-  },
+        Navbar // Register the Navbar component
+    },
     props: {
         pendingJobPostings: {
             type: Array,
@@ -66,8 +65,14 @@ export default {
         })
         .then(response => {
             if (response.ok) {
+                // Find the index of the approved job posting
+                const index = this.pendingJobPostings.findIndex(job => job.id === jobId);
                 // Remove the approved job posting from the array
-                this.pendingJobPostings = this.pendingJobPostings.filter(job => job.id !== jobId);
+                if (index !== -1) {
+                    this.pendingJobPostings.splice(index, 1);
+                }
+                // Reload the page
+                location.reload();
             } else {
                 console.error('Failed to update job posting');
             }
@@ -90,8 +95,14 @@ export default {
         })
         .then(response => {
             if (response.ok) {
+                // Find the index of the rejected job posting
+                const index = this.pendingJobPostings.findIndex(job => job.id === jobId);
                 // Remove the rejected job posting from the array
-                this.pendingJobPostings = this.pendingJobPostings.filter(job => job.id !== jobId);
+                if (index !== -1) {
+                    this.pendingJobPostings.splice(index, 1);
+                }
+                // Reload the page
+                location.reload();
             } else {
                 console.error('Failed to reject job posting');
             }
@@ -104,6 +115,7 @@ export default {
 
 }
 </script>
+
 <style>
 .jobCard {
     width: 300px;

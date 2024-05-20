@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use Inertia\Inertia;
 use App\Notifications\NewJobAddedNotification;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
 {
@@ -47,23 +48,24 @@ class AdminController extends Controller
         return Inertia::render('admin/rejected-job-postings', ['rejectedJobPostings' => $RejectedJobPostings]);
     }
     public function update(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'id' => 'required|exists:jobportals,id',
-            'status' => 'required|in:accepted,rejected,cancelled', // Assuming these are the valid status values
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'id' => 'required|exists:jobportals,id',
+        'status' => 'required|in:accepted,rejected,cancelled', 
+    ]);
 
-        // Find the job by its ID
-        $job = JobPortal::findOrFail($request->id);
+    // Find the job by its ID
+    $job = JobPortal::findOrFail($request->id);
 
-        // Update the status
-        $job->status = $request->status;
-        $job->save();
+    // Update the status
+    $job->status = $request->status;
+    $job->save();
 
-        // Redirect back to the page where job postings are managed
-        return Redirect::route('admin.jobPostings');
-    }
+    // Return a JSON response indicating success
+    return response()->json(['message' => 'Job posting updated successfully']);
+}
+
     public function dashboard()
 {
     // Count the total number of users except admins

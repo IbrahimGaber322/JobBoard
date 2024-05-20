@@ -36,7 +36,8 @@
 </nav>
 
 </template>
-  <script>
+<script>
+import axios from 'axios';
 
 export default {
   data() {
@@ -47,6 +48,8 @@ export default {
   },
   created() {
     this.fetchNotificationCount();
+    // Start polling for new notifications every 10 seconds
+    this.pollNotifications();
   },
   methods: {
     toggleDropdown() {
@@ -60,6 +63,12 @@ export default {
         .catch(error => {
           console.error('Error fetching notification count:', error);
         });
+    },
+    pollNotifications() {
+      // Poll for new notifications every 10 seconds
+      setInterval(() => {
+        this.fetchNotificationCount();
+      }, 3000); // 10 seconds in milliseconds
     },
     redirectToJobPostings() {
       window.location.href = '/admin/job-postings';
@@ -82,6 +91,7 @@ export default {
   }
 }
 </script>
+
 <style>
 
 .notification-counter {

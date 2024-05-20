@@ -15,12 +15,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10 mb-10">
                         <div v-for="acceptedJob in acceptedJobPostings" :key="acceptedJob.id" class="relative">
                             <div class="bg-white rounded-lg shadow-md p-6 w-full md:w-5/6 lg:w-8/10 jobCard">
-                                <h2 class="text-lg font-semibold mb-4">{{ acceptedJob.title }}</h2>
+                                <h2 class="text-lg font-semibold mb-4 text-blue-900">{{ acceptedJob.title }}</h2>
                                 <p class="text-gray-700 mb-4 description">{{ acceptedJob.desc }}</p>
                                 <div class="text-gray-700 mb-4">
-                                    <p class="font-semibold">Category:</p>
+                                    <p class="font-semibold text-blue-900">Category:</p>
                                     <p class="italic">{{ acceptedJob.category }}</p>
-                                    <p class="font-semibold">Location:</p>
+                                    <p class="font-semibold text-blue-900">Location:</p>
                                     <p class="italic">{{ acceptedJob.location }}</p>
                                 </div>
                         
