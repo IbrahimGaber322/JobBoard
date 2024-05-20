@@ -41,9 +41,9 @@ class JobController extends Controller
       
         ]);
   // Inside the store method
-        // $employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
-        // $admin = User::where('role', 'admin')->first();
-        // $admin->notify(new NewJobAddedNotification($employerName));
+         $employerName = auth()->user()->name; // Assuming the employer's name is stored in the 'name' field
+         $admin = User::where('role', 'admin')->first();
+         $admin->notify(new NewJobAddedNotification($employerName));
         $userId = auth()->id(); 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
