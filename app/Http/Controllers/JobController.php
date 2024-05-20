@@ -27,7 +27,6 @@ class JobController extends Controller
         return Inertia::render('Job/Create');
     }
 
-
     public function store(Request $request, CloudinaryService $cloudinaryService)
     {
         $request->validate([
@@ -74,7 +73,6 @@ class JobController extends Controller
 
         return redirect()->route('job.create')->with('success', 'Job created successfully.');
     }
-
     public function employerJobs(Request $request)
     {
         $userId = $request->user()->id;
