@@ -1,26 +1,35 @@
 <template>
-    <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-8">Pending Job Postings</h1>
-        
-        <!-- Tailwind CSS cards to display pending job postings -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id" class="relative">
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <h2 class="text-lg font-semibold mb-2">{{ pendingJob.title }}</h2>
-                    <p class="text-gray-700 mb-2">{{ pendingJob.desc }}</p>
-                    <div class="text-gray-700 mb-2">
-                        <p class="font-semibold">Category:</p>
-                        <p class="italic">{{ pendingJob.category }}</p>
-                        <p class="font-semibold">Location:</p>
-                        <p class="italic">{{ pendingJob.location }}</p>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <button @click="approveJob(pendingJob.id)" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded focus:outline-none">Approve</button>
-                        <button @click="rejectJob(pendingJob.id)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded focus:outline-none">Reject</button>
-                    </div>
+    <div>
+        <Navbar/>
+        <div class="relative bg-gradient-to-r">
+
+            <div class="absolute bg-blue-600 rounded-full w-96 h-96 -top-32 -left-32 mix-blend-multiply opacity-50"></div>
+            <div class="absolute bg-blue-500 w-64 h-64 transform rotate-45 -bottom-16 -right-32 mix-blend-multiply opacity-50"></div>
+            <div class="absolute bg-blue-700 w-96 h-32 -bottom-8 -right-16 mix-blend-multiply opacity-50"></div>
+
+            <div class="container mx-auto">
+                <div class="flex justify-center">
+                    <h1 class="text-4xl font-bold mt-5 text-blue-900">Pending Job Postings</h1>
                 </div>
-                <div class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-2 py-1 rounded-full">
-                    <span class="text-xs font-semibold">New</span>
+                <div class="flex justify-center items-center">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10 mb-10">
+                        <div v-for="pendingJob in pendingJobPostings" :key="pendingJob.id" class="relative">
+                            <div class="bg-white rounded-lg shadow-md p-6 w-full md:w-5/6 lg:w-8/10 jobCard">
+                                <h2 class="text-lg font-semibold mb-4">{{ pendingJob.title }}</h2>
+                                <p class="text-gray-700 mb-4 description">{{ pendingJob.desc }}</p>
+                                <div class="text-gray-700 mb-4">
+                                    <p class="font-semibold">Category:</p>
+                                    <p class="italic">{{ pendingJob.category }}</p>
+                                    <p class="font-semibold">Location:</p>
+                                    <p class="italic">{{ pendingJob.location }}</p>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <button @click="approveJob(pendingJob.id)" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded focus:outline-none">Approve</button>
+                                    <button @click="rejectJob(pendingJob.id)" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded focus:outline-none">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,8 +37,14 @@
 </template>
 
 <script>
+import Navbar from './Navbar.vue';
+
 export default {
+    
     name: 'JobPostings',
+    components: {
+    Navbar // Register the Navbar component
+  },
     props: {
         pendingJobPostings: {
             type: Array,
@@ -38,7 +53,6 @@ export default {
     },
     methods: {
     approveJob(jobId) {
-        // Send a POST request to update the job posting status
         fetch(`/admin/job-postings/update`, {
             method: 'POST',
             headers: {
@@ -47,13 +61,13 @@ export default {
             },
             body: JSON.stringify({
                 id: jobId,
-                status: 'accepted' // Change the status as needed
+                status: 'accepted'
             })
         })
         .then(response => {
             if (response.ok) {
-                // If the update was successful, refresh the data in the component
-                this.fetchPendingJobPostings(); // You need to define this method to fetch updated data
+                // Remove the approved job posting from the array
+                this.pendingJobPostings = this.pendingJobPostings.filter(job => job.id !== jobId);
             } else {
                 console.error('Failed to update job posting');
             }
@@ -63,7 +77,6 @@ export default {
         });
     },
     rejectJob(jobId) {
-        // Send a POST request to reject the job posting
         fetch(`/admin/job-postings/update`, {
             method: 'POST',
             headers: {
@@ -72,13 +85,13 @@ export default {
             },
             body: JSON.stringify({
                 id: jobId,
-                status: 'rejected' // Set the status to 'rejected'
+                status: 'rejected'
             })
         })
         .then(response => {
             if (response.ok) {
-                // If the update was successful, refresh the data in the component
-                this.fetchPendingJobPostings(); // You need to define this method to fetch updated data
+                // Remove the rejected job posting from the array
+                this.pendingJobPostings = this.pendingJobPostings.filter(job => job.id !== jobId);
             } else {
                 console.error('Failed to reject job posting');
             }
@@ -91,3 +104,26 @@ export default {
 
 }
 </script>
+<style>
+.jobCard {
+    width: 300px;
+    height: 400px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.description {
+    flex-grow: 1; 
+    overflow: auto;
+}
+
+.description::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.description {
+    scrollbar-width: thin; 
+    scrollbar-color: #9facf3 #f1f1f1; 
+}
+</style>
