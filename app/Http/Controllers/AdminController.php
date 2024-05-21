@@ -218,10 +218,14 @@ public function showJobPosting($id)
     $job = JobPortal::findOrFail($id);
     $employer = User::findOrFail($job->emp_id); 
 
+    $numApplications = Application::where('job_id', $job->id)->count();
+
     return Inertia::render('admin/JobDetail', [
         'job' => $job,
         'employer' => $employer,
+        'numApplications' => $numApplications, // Pass the number of applications to the view
     ]);
 }
+
 
 }
