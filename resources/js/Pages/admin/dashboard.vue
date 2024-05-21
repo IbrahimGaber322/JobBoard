@@ -95,16 +95,7 @@ export default {
   },
 
   methods: {
-    redirect(route) {
-      const routes = {
-        'Users': '/admin/user-counts',
-        'Job Posting Activity': '/admin/job-postings-dashboard',
-        'Accepted Job Postings': '/admin/accepted-job-postings',
-        'Pending Job Postings': '/admin/job-postings',
-        'Rejected Job Postings': '/admin/rejected-job-postings'
-      };
-      window.location.href = routes[route];
-    },
+   
     redirectToEmployerJobPostings(employerId) {
       window.location.href = `/admin/employer/${employerId}/job-postings`;
     },

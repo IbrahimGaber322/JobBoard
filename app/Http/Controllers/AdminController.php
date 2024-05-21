@@ -81,13 +81,12 @@ public function dashboard()
     // Render the view and pass the data
     return Inertia::render('admin/dashboard', [
         'totalUsers' => $totalUsers,
-        'totalJobs' => $totalJobs, // Make sure to include this line
+        'totalJobs' => $totalJobs,
         'jobCounts' => $jobCounts,
         'employersCount' => $employersCount,
         'candidatesCount' => $candidatesCount,
     ]);
 }
-
 
 
 
@@ -214,6 +213,5 @@ public function markNotificationAsRead($notificationId)
 
     return response()->json(['message' => 'Notification marked as read successfully']);
 }
-
 
 }
