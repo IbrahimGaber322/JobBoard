@@ -50,6 +50,8 @@ Route::middleware([EnsureIsAdmin::class])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('/admin/job-postings/{id}', [AdminController::class, 'showJobPosting'])->name('admin.jobPosting');
+
 });
 
 //Routes for employers only

@@ -213,5 +213,15 @@ public function markNotificationAsRead($notificationId)
 
     return response()->json(['message' => 'Notification marked as read successfully']);
 }
+public function showJobPosting($id)
+{
+    $job = JobPortal::findOrFail($id);
+    $employer = User::findOrFail($job->emp_id); 
+
+    return Inertia::render('admin/JobDetail', [
+        'job' => $job,
+        'employer' => $employer,
+    ]);
+}
 
 }
