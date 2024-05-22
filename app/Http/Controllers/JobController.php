@@ -172,9 +172,10 @@ class JobController extends Controller
             $isOwner = null;
             $hasApplied = false;
             $appId = null;
+            $isPending = false
         }
 
-        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId]);
+        return Inertia::render('Job/ShowJob', ['job' => $job, 'userRole' => $userRole, 'isEmployer' => $isEmployer, 'hasApplied' => $hasApplied, 'isOwner' => $isOwner, 'appId' => $appId, 'isPending' => $isPending]);
     }
 
 
